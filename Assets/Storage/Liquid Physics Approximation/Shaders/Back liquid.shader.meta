@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 077c95fc707550a43b3686945ea356ce
+timeCreated: 1476813007
+licenseType: Store
+ShaderImporter:
+  defaultTextures:
+  - _StaticAnimationSlicePattern: {fileID: 2800000, guid: 3a5a96df060a5cf4a9cc0c59e13486b7,
+      type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
