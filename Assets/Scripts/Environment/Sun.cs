@@ -29,7 +29,7 @@ public class Sun : MonoBehaviour {
 
         // Sunlight, Shadow, Sky / Fog
         _sunsettings.Add(new Sunsetting(2f, "FFC07AFF", "720101", "FF676700")); // Warm Sunset
-        _sunsettings.Add(new Sunsetting(2f, "14253BFF", "171A29", "1C51B8FF", 0.00001f)); // Twilight
+        _sunsettings.Add(new Sunsetting(2f, "14253BFF", "171A29", "1C2232", 0.00001f)); // Twilight
         _sunsettings.Add(new Sunsetting(2f, "FEFFB0FF", "2A96A6", "FEFFB0FF")); // Spring Morning
         _sunsettings.Add(new Sunsetting(2f, "2D76D9FF", "171A29", "1C51B8FF", 0.00001f)); // Twilight
         _sunsettings.Add(new Sunsetting(2f, "FF6D0DFF", "981294", "975CC800")); // Soft Heat
@@ -75,7 +75,7 @@ public class Sun : MonoBehaviour {
     void Update()
     {
         //Camera.main.backgroundColor = RenderSettings.fogColor = _sunsettingCurrent.colorSky;
-        //timer += Time.deltaTime;
+       // timer += Time.deltaTime;
 
         if(timer > 5)
         {

@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 136617330441282198}
   - component: {fileID: 23781916490440778}
   - component: {fileID: 114274324292170174}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: Prefab_Clouds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -37,7 +37,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1954462270533824}
   m_LocalRotation: {x: 0, y: 0.3965872, z: 0, w: 0.9179971}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -83.16994, y: -10.085913, z: -1.3695984}
   m_LocalScale: {x: 5339.7124, y: 1334.9291, z: 5339.7163}
   m_Children: []
   m_Father: {fileID: 0}
@@ -73,6 +73,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
 --- !u!33 &33124213095256778
 MeshFilter:
