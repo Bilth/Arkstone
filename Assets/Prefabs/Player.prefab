@@ -388,7 +388,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 133418}
   m_LocalRotation: {x: -0, y: 0.18024835, z: -0, w: 0.9836211}
-  m_LocalPosition: {x: -59.112, y: -5.2, z: -2.914}
+  m_LocalPosition: {x: -17.878372, y: -8.44, z: 16.074402}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 454518}
@@ -553,15 +553,15 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.22500002, g: 0.69227934, b: 1, a: 1}
+  m_BackGroundColor: {r: 0.17799997, g: 0.67361754, b: 1, a: 1}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.2
-  far clip plane: 1000000
+  near clip plane: 0.3
+  far clip plane: 100000
   field of view: 70
   orthographic: 0
   orthographic size: 5
@@ -875,7 +875,7 @@ Light:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 155992}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 8
   m_Type: 2
   m_Color: {r: 1, g: 0.7735294, b: 0.43382353, a: 1}
@@ -2182,11 +2182,11 @@ MonoBehaviour:
   _sunFlares: 1
   _sun: {fileID: 0}
   _sunFlaresIntensity: 1
-  _sunFlaresSolarWindSpeed: 0.01
+  _sunFlaresSolarWindSpeed: 0.078
   _sunFlaresTint: {r: 1, g: 1, b: 1, a: 1}
   _sunFlaresDownsampling: 1
   _sunFlaresSunIntensity: 0.1
-  _sunFlaresSunDiskSize: 0.05
+  _sunFlaresSunDiskSize: 0.089
   _sunFlaresSunRayDiffractionIntensity: 3.5
   _sunFlaresSunRayDiffractionThreshold: 0.13
   _sunFlaresCoronaRays1Length: 0.02
@@ -2212,7 +2212,7 @@ MonoBehaviour:
   _sunFlaresHaloOffset: 0.22
   _sunFlaresHaloAmplitude: 15.1415
   _sunFlaresHaloIntensity: 0.01
-  _sunFlaresRotationDeadZone: 0
+  _sunFlaresRotationDeadZone: 1
   isDirty: 0
   bMat: {fileID: 0}
 --- !u!114 &114831973831997270

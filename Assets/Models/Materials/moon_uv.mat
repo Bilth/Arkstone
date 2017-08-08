@@ -149,7 +149,7 @@ Material:
     - _BloomWeights2: {r: 0.35, g: 0.55, b: 0.7, a: 0.8}
     - _BokehData: {r: 10, g: 1, b: 0, a: 1}
     - _BokehData2: {r: 1000, g: 4, b: 0, a: 0}
-    - _Color: {r: 0.866, g: 0.39086115, b: 0.31838235, a: 1}
+    - _Color: {r: 0.866, g: 0.866, b: 0.866, a: 1}
     - _ColorBoost: {r: 1.1, g: 1.1, b: 0.08, a: 0}
     - _CompareParams: {r: 0.7853982, g: 0.001, b: 0, a: 0}
     - _Dirt: {r: 0.5, g: 0.5, b: 0.5, a: 0.5}

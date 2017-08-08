@@ -10,25 +10,20 @@ Material:
   m_Shader: {fileID: 4800000, guid: 32bb107bcd38f764bac2ad1b07e62466, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
+  disabledShaderPasses: []
   m_SavedProperties:
-    serializedVersion: 2
+    serializedVersion: 3
     m_TexEnvs:
-    - first:
-        name: _Mask
-      second:
+    - _Mask:
         m_Texture: {fileID: 10300, guid: 0000000000000000f000000000000000, type: 0}
-        m_Scale: {x: 15, y: 1}
+        m_Scale: {x: 15, y: 1.19}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - first:
-        name: _InfluenceStrength
-      second: 5
-    - first:
-        name: _Scale
-      second: 1
+    - _InfluenceStrength: 60.76
+    - _Scale: 7.95
     m_Colors:
-    - first:
-        name: _WindParams
-      second: {r: 0.3, g: 2, b: 0.2, a: 3}
+    - _WindParams: {r: 0.3, g: 2, b: 0.2, a: 3}

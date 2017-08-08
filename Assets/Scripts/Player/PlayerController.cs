@@ -87,8 +87,9 @@ public class PlayerController : MonoBehaviour {
 
             _motor.Teleport(20, 0, 8);
 
-            if(VRSettings.enabled)
+            if(VRSettings.enabled && VRDevice.isPresent)
             {
+                VRDevice.SetTrackingSpaceType(TrackingSpaceType.RoomScale);
                 Debug.Log("Resetting Seated Zero Pose.");
                 //SteamVR.instance.hmd.ResetSeatedZeroPose();
                 Valve.VR.OpenVR.System.ResetSeatedZeroPose();

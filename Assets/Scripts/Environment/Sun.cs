@@ -10,7 +10,7 @@ public class Sun : MonoBehaviour {
     Color colorStart = Color.red;
     Color colorEnd = Color.cyan;
     float step = 0;
-    float duration = 20;
+    float duration = 200;
     float timer = 0;
     int colorIndex = 0;
     Light _sunlight;
@@ -42,7 +42,7 @@ public class Sun : MonoBehaviour {
         
        
         colorIndex = 0;
-        //setSetting(_sunsettings[colorIndex]);
+       // setSetting(_sunsettings[colorIndex]);
 
 
         //Color tColor = Color.red;
@@ -75,7 +75,7 @@ public class Sun : MonoBehaviour {
     void Update()
     {
         //Camera.main.backgroundColor = RenderSettings.fogColor = _sunsettingCurrent.colorSky;
-       // timer += Time.deltaTime;
+        //timer += Time.deltaTime;
 
         if(timer > 5)
         {
