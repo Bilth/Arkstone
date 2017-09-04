@@ -335,7 +335,7 @@ public class PlayerMotor : MonoBehaviour {
                 //1.5f, .5f
                 // As lean approaches 80, slow it down
                 float tDrag = -.2f;// -.3f; // Of Magnitude, 0f for Riding Crystal
-                float tSpeed = 2f;// + (_isGrounded ? (Input.GetAxisRaw("Course") * .25f) : 0); //1.5f, 1f: 7f for Riding Crystal
+                float tSpeed = 1.3f;// + (_isGrounded ? (Input.GetAxisRaw("Course") * .25f) : 0); //1.5f, 1f: 7f for Riding Crystal
                 float tGroundDrag = (tDrag * _momentumMagnitude) + tSpeed;
                 if(tGroundDrag < 0) { tGroundDrag = 0; }
                 //Debug.Log("Drag: " + tGroundDrag + ", Momentum: " + _momentumMagnitude);

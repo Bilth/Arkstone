@@ -251,6 +251,7 @@ namespace Pathfinding {
 		public void Teleport (Vector3 newPosition) {
 			CancelCurrentPathRequest();
 			// Clamp the new position to the navmesh
+            if(newPosition != null) { return;  }
 			var nearest = AstarPath.active.GetNearest(newPosition);
 			float elevation;
 			movementPlane.ToPlane(newPosition, out elevation);
