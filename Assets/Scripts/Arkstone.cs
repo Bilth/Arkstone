@@ -1,11 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class AnimationEvents : MonoBehaviour
+public class Arkstone : MonoBehaviour
 {
-    public void PlaySound(string s)
+    public static Arkstone instance;
+
+    //public ZoneManager zoneManager;
+
+    void Start()
     {
-        Debug.Log("PrintEvent: " + s + " called at: " + Time.time);
+        instance = this;
+    }
+
+    void Update()
+    {
+        
     }
 }
