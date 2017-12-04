@@ -1,0 +1,186 @@
+fileFormatVersion: 2
+guid: b44c1e2e4f3a4f446817514b898fd811
+timeCreated: 1512370612
+licenseType: Free
+ModelImporter:
+  serializedVersion: 21
+  fileIDToRecycleName:
+    100000: //RootNode
+    100002: LimbsUpper
+    100004: LimbsUpper_001
+    100006: Plane_001
+    100008: Plane_002
+    100010: Plane_003
+    100012: Plane_004
+    100014: Plane_005
+    100016: Plane_006
+    100018: Plane_007
+    100020: Plane_008
+    100022: Plane_009
+    100024: Stump
+    100026: Leaves
+    100028: Leaves_001
+    100030: Leaves_002
+    100032: Leaves_003
+    100034: Leaves_004
+    100036: Leaves_005
+    100038: Leaves_006
+    100040: Leaves_007
+    400000: //RootNode
+    400002: LimbsUpper
+    400004: LimbsUpper_001
+    400006: Plane_001
+    400008: Plane_002
+    400010: Plane_003
+    400012: Plane_004
+    400014: Plane_005
+    400016: Plane_006
+    400018: Plane_007
+    400020: Plane_008
+    400022: Plane_009
+    400024: Stump
+    400026: Leaves
+    400028: Leaves_001
+    400030: Leaves_002
+    400032: Leaves_003
+    400034: Leaves_004
+    400036: Leaves_005
+    400038: Leaves_006
+    400040: Leaves_007
+    2300000: LimbsUpper
+    2300002: LimbsUpper_001
+    2300004: Plane_001
+    2300006: Plane_002
+    2300008: Plane_003
+    2300010: Plane_004
+    2300012: Plane_005
+    2300014: Plane_006
+    2300016: Plane_007
+    2300018: Plane_008
+    2300020: Plane_009
+    2300022: Stump
+    2300024: Leaves
+    2300026: Leaves_001
+    2300028: Leaves_002
+    2300030: Leaves_003
+    2300032: Leaves_004
+    2300034: Leaves_005
+    2300036: Leaves_006
+    2300038: Leaves_007
+    3300000: LimbsUpper
+    3300002: LimbsUpper_001
+    3300004: Plane_001
+    3300006: Plane_002
+    3300008: Plane_003
+    3300010: Plane_004
+    3300012: Plane_005
+    3300014: Plane_006
+    3300016: Plane_007
+    3300018: Plane_008
+    3300020: Plane_009
+    3300022: Stump
+    3300024: Leaves
+    3300026: Leaves_001
+    3300028: Leaves_002
+    3300030: Leaves_003
+    3300032: Leaves_004
+    3300034: Leaves_005
+    3300036: Leaves_006
+    3300038: Leaves_007
+    4300000: LimbsUpper_001
+    4300002: Plane_008
+    4300004: Plane_007
+    4300006: Plane_006
+    4300008: Plane_005
+    4300010: Plane_004
+    4300012: Plane_003
+    4300014: Plane_002
+    4300016: Plane_001
+    4300018: Plane_009
+    4300020: LimbsUpper
+    4300022: Stump
+    4300024: Leaves
+    4300026: Leaves_007
+    4300028: Leaves_006
+    4300030: Leaves_005
+    4300032: Leaves_004
+    4300034: Leaves_003
+    4300036: Leaves_002
+    4300038: Leaves_001
+    7400000: Default Take
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

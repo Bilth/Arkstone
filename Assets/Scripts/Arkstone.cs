@@ -7,7 +7,9 @@ public class Arkstone : MonoBehaviour
 {
     public static Arkstone instance;
 
-    //public ZoneManager zoneManager;
+    //public Database _database;
+
+    //public var Zone _zone;
 
     void Start()
     {

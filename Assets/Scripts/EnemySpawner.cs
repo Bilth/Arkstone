@@ -2,8 +2,9 @@
 using System.Collections;
 using UnityEngine.Networking;
 
-public class EnemySpawner : NetworkBehaviour {
-    
+public class EnemySpawner : NetworkBehaviour
+{
+
     public GameObject enemyPrefab;
     public int numberOfEnemies;
 
@@ -19,7 +20,7 @@ public class EnemySpawner : NetworkBehaviour {
         }
     }
 
-    public void Update ()
+    public void Update()
     {
         /*if (_timer < Time.time)
         {

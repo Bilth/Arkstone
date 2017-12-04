@@ -22,14 +22,15 @@ public class Bullet : MonoBehaviour
         {
             Debug.Log("Hit " + tHit);
 
-            if(tPlayer.isLocalPlayer)
+            if (tPlayer.isLocalPlayer)
             {
                 return;
-            } else
+            }
+            else
             {
                 tPlayer.TakeDamage(200);
             }
-            
+
         }
 
         ExplosionDamage(transform.position, 10);
@@ -64,7 +65,7 @@ public class Bullet : MonoBehaviour
     {
         center.z += 1;
         Collider[] hitColliders = Physics.OverlapSphere(center, radius);
-        
+
         int i = 0;
         while (i < hitColliders.Length)
         {
@@ -76,7 +77,7 @@ public class Bullet : MonoBehaviour
                 Debug.Log("RIGID: " + hitColliders[i].gameObject.name);
             }*/
 
-            if(tRigidbody != null)
+            if (tRigidbody != null)
             {
                 hitColliders[i].GetComponent<Rigidbody>().isKinematic = false;
                 hitColliders[i].GetComponent<Rigidbody>().AddExplosionForce(3000, center, 3000);
@@ -89,11 +90,12 @@ public class Bullet : MonoBehaviour
                 {
                     //hitColliders[i].GetComponent<Rigidbody>().AddForce(500, center, 200);
                 }
-                    // tPlayer.TakeDamage(50);
-                    Debug.Log("Hit Player");
-            } else
+                // tPlayer.TakeDamage(50);
+                Debug.Log("Hit Player");
+            }
+            else
             {
-                
+
             }
 
             i++;
