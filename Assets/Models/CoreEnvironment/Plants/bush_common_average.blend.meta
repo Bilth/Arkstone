@@ -26,6 +26,8 @@ ModelImporter:
     100036: Leaves_005
     100038: Leaves_006
     100040: Leaves_007
+    100042: Cube
+    100044: BushFill
     400000: //RootNode
     400002: LimbsUpper
     400004: LimbsUpper_001
@@ -47,6 +49,8 @@ ModelImporter:
     400036: Leaves_005
     400038: Leaves_006
     400040: Leaves_007
+    400042: Cube
+    400044: BushFill
     2300000: LimbsUpper
     2300002: LimbsUpper_001
     2300004: Plane_001
@@ -67,6 +71,8 @@ ModelImporter:
     2300034: Leaves_005
     2300036: Leaves_006
     2300038: Leaves_007
+    2300040: Cube
+    2300042: BushFill
     3300000: LimbsUpper
     3300002: LimbsUpper_001
     3300004: Plane_001
@@ -87,6 +93,8 @@ ModelImporter:
     3300034: Leaves_005
     3300036: Leaves_006
     3300038: Leaves_007
+    3300040: Cube
+    3300042: BushFill
     4300000: LimbsUpper_001
     4300002: Plane_008
     4300004: Plane_007
@@ -107,6 +115,8 @@ ModelImporter:
     4300034: Leaves_003
     4300036: Leaves_002
     4300038: Leaves_001
+    4300040: Cube
+    4300042: BushFill
     7400000: Default Take
     9500000: //RootNode
   materials:
