@@ -403,7 +403,7 @@ public class PlayerMotor : MonoBehaviour {
     }
 
 	void _performRotation() {
-        if(VRSettings.enabled)
+        if(UnityEngine.XR.XRSettings.enabled)
         {
             _cameraRotationCharge += _rotate.y;
             if (Mathf.Abs(_cameraRotationCharge) < 22.5f)
