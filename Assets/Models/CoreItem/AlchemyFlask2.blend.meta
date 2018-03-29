@@ -95,6 +95,21 @@ ModelImporter:
     100174: Roundcube_020
     100176: Roundcube_021
     100178: Roundcube_022
+    100180: Circle_004
+    100182: Circle_005
+    100184: Cylinder_017
+    100186: Firewood1
+    100188: Firewood1_001
+    100190: Firewood1_002
+    100192: Firewood1_004
+    100194: Firewood1_005
+    100196: Firewood1_006
+    100198: Grid
+    100200: Plane_012
+    100202: Vert
+    100204: Vert_009
+    100206: Vert_010
+    100208: Vert_011
     400000: //RootNode
     400002: Bottle
     400004: Bottle_001
@@ -185,6 +200,21 @@ ModelImporter:
     400174: Roundcube_020
     400176: Roundcube_021
     400178: Roundcube_022
+    400180: Circle_004
+    400182: Circle_005
+    400184: Cylinder_017
+    400186: Firewood1
+    400188: Firewood1_001
+    400190: Firewood1_002
+    400192: Firewood1_004
+    400194: Firewood1_005
+    400196: Firewood1_006
+    400198: Grid
+    400200: Plane_012
+    400202: Vert
+    400204: Vert_009
+    400206: Vert_010
+    400208: Vert_011
     2100000: Bowl
     2100002: Material
     2100004: CrushedHerbs
@@ -213,6 +243,15 @@ ModelImporter:
     2100050: TexHive
     2100052: CherrySkin
     2100054: FeatherSmall
+    2100056: BarkOak
+    2100058: ForestFloor
+    2100060: LogEnd
+    2100062: CharcoalLight
+    2100064: WoodOakChar
+    2100066: WoodCutOak
+    2100068: CharcoalCut
+    2100070: TexAsh
+    2100072: WoodOak
     2300000: Bottle
     2300002: Bottle_001
     2300004: Bottle_002
@@ -302,6 +341,21 @@ ModelImporter:
     2300172: Roundcube_020
     2300174: Roundcube_021
     2300176: Roundcube_022
+    2300178: Circle_004
+    2300180: Circle_005
+    2300182: Cylinder_017
+    2300184: Firewood1
+    2300186: Firewood1_001
+    2300188: Firewood1_002
+    2300190: Firewood1_004
+    2300192: Firewood1_005
+    2300194: Firewood1_006
+    2300196: Grid
+    2300198: Plane_012
+    2300200: Vert
+    2300202: Vert_009
+    2300204: Vert_010
+    2300206: Vert_011
     3300000: Bottle
     3300002: Bottle_001
     3300004: Bottle_002
@@ -391,6 +445,21 @@ ModelImporter:
     3300172: Roundcube_020
     3300174: Roundcube_021
     3300176: Roundcube_022
+    3300178: Circle_004
+    3300180: Circle_005
+    3300182: Cylinder_017
+    3300184: Firewood1
+    3300186: Firewood1_001
+    3300188: Firewood1_002
+    3300190: Firewood1_004
+    3300192: Firewood1_005
+    3300194: Firewood1_006
+    3300196: Grid
+    3300198: Plane_012
+    3300200: Vert
+    3300202: Vert_009
+    3300204: Vert_010
+    3300206: Vert_011
     4300000: Roundcube_018
     4300002: Cube_004
     4300004: Cube_003
@@ -480,6 +549,21 @@ ModelImporter:
     4300172: Plane_011
     4300174: Plane_010
     4300176: Plane_009
+    4300178: Vert_010
+    4300180: Vert_009
+    4300182: Grid
+    4300184: Vert_011
+    4300186: Vert
+    4300188: Circle_005
+    4300190: Plane_012
+    4300192: Cylinder_017
+    4300194: Firewood1_005
+    4300196: Firewood1_004
+    4300198: Firewood1_006
+    4300200: Circle_004
+    4300202: Firewood1_002
+    4300204: Firewood1_001
+    4300206: Firewood1
     7400000: Default Take
     9500000: //RootNode
   externalObjects: {}
