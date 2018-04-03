@@ -30,6 +30,8 @@ public class PlayerMotor : MonoBehaviour {
     private RaycastHit _groundHit;
     private float _distToGround = 0f;
 
+    private LineRenderer _lineRenderer;
+
     private AudioSource _audioSource;
     public AudioClip land;
 
@@ -56,6 +58,21 @@ public class PlayerMotor : MonoBehaviour {
 
         _colliders = new List<string>();
 
+        /* _lineRenderer = gameObject.AddComponent<LineRenderer>();
+         _lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+         _lineRenderer.startWidth = .2f;
+         _lineRenderer.endWidth = .1f;
+         _lineRenderer.widthMultiplier = 0.2f;
+         _lineRenderer.positionCount = 2;
+         _lineRenderer.sortingOrder = 1;
+         _lineRenderer.SetPosition(0, transform.position);
+         _lineRenderer.SetPosition(1, new Vector3(transform.position.x - 1.0f, transform.position.y));
+         _lineRenderer.startColor = Color.yellow;
+         _lineRenderer.endColor = Color.red;*/
+
+        //DrawLine(transform.position, transform.position + new Vector3(0.0f, -1.0f), Color.red, 5);
+        DrawLineHere(transform.position, transform.position + new Vector3(0.0f, -1.0f), Color.red, 5);
+
         //_velocity.y = 0;
         _isGrounded = false;
         _speed = SPEED_BASE;
@@ -63,8 +80,37 @@ public class PlayerMotor : MonoBehaviour {
         _distToGround = _body.GetComponent<Collider>().bounds.extents.y;
     }
 
-	// Gets a movement vector
-	public void Lean(Vector3 pLean) {
+    void DrawLine(Vector3 start, Vector3 end, Color color, float duration = 0.2f)
+    {
+        GameObject myLine = new GameObject();
+        myLine.transform.position = Vector3.zero; // start;
+        myLine.AddComponent<LineRenderer>();
+        LineRenderer lr = myLine.GetComponent<LineRenderer>();
+        lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        lr.SetColors(color, color);
+        lr.SetWidth(0.1f, 0.2f);
+        lr.SetPosition(0, start);
+        lr.SetPosition(1, end);
+        //GameObject.Destroy(myLine, duration);
+    }
+
+
+    void DrawLineHere(Vector3 start, Vector3 end, Color color, float duration = 0.2f)
+    {
+        gameObject.AddComponent<LineRenderer>();
+        _lineRenderer = gameObject.GetComponent<LineRenderer>();
+        _lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        _lineRenderer.startColor = Color.yellow;
+        _lineRenderer.endColor = Color.red;
+        _lineRenderer.startWidth = .1f;
+        _lineRenderer.endWidth = .5f;
+        _lineRenderer.SetPosition(0, start);
+        _lineRenderer.SetPosition(1, end);
+        //GameObject.Destroy(myLine, duration);
+    }
+
+    // Gets a movement vector
+    public void Lean(Vector3 pLean) {
         _lean = pLean;
 	}
 
@@ -240,22 +286,42 @@ public class PlayerMotor : MonoBehaviour {
         Vector3 tNormal = Vector3.up;
 
         //float tDistToGround = _body.GetComponent<Collider>().bounds.size.y - _body.GetComponent<Collider>().bounds.center.y;
-        /*Ray tRay = new Ray(Vector3.zero, Vector3.down);
-        RaycastHit tHit;
-        if (Physics.Raycast(Vector3.zero, Vector3.down, 2f))
+
+        // Raycast to Floor
+        Ray tRay = new Ray(transform.position, Vector3.down);
+        /*if (Physics.Raycast(Vector3.zero, Vector3.down, 2f))
         {
-            normal = hit.normal;
+            tNormal = tHit.normal;
+            Debug.DrawLine(Vector3.zero, Vector3.)
         }*/
 
-        
-            //Ray tRay = new Ray(transform.position, Vector3.down); // Camera.main.ScreenPointToRay(Input.mousePosition);
-            //RaycastHit tHit;
+        if (Physics.Raycast(transform.position, Vector3.down, out _groundHit, 2.0f)) {
+            Debug.DrawRay(transform.position, Vector3.down, Color.red);
+            //_lineRenderer.startColor = Color.yellow;
+            //_lineRenderer.endColor = Color.green;
+            _lineRenderer.SetPosition(0, transform.position);
+            _lineRenderer.SetPosition(1, transform.position + new Vector3(0, -1.0f));
+        } else
+        {
+            Debug.DrawRay(transform.position, Vector3.down, Color.blue);
+            //_lineRenderer.startColor = Color.yellow;
+            //_lineRenderer.endColor = Color.red;
+            _lineRenderer.SetPosition(0, transform.position);
+            _lineRenderer.SetPosition(1, transform.position + new Vector3(0, -1.0f));
+        }
 
-            //if (Physics.Raycast(transform.position, -Vector3.up, out _groundHit, 100.0f)) {
-                //Debug.DrawLine(tRay.origin, tHit.point);_groundHit
-                
-            //}
-            
+
+
+
+
+        //Ray tRay = new Ray(transform.position, Vector3.down); // Camera.main.ScreenPointToRay(Input.mousePosition);
+        //RaycastHit tHit;
+
+        //if (Physics.Raycast(transform.position, -Vector3.up, out _groundHit, 100.0f)) {
+        //Debug.DrawLine(tRay.origin, tHit.point);_groundHit
+
+        //}
+
         //Debug.Log(tHit.normal);
 
 
