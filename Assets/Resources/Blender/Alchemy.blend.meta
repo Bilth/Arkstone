@@ -172,6 +172,46 @@ ModelImporter:
     100328: LeavesOak_028
     100330: LeavesOak_041
     100332: OakBranch_004
+    100334: ShrubBlueberryBranch
+    100336: ShrubBlueberryBranch_001
+    100338: ShrubBlueberryBranch_002
+    100340: ShrubBlueberryBranch_003
+    100342: ShrubBlueberryBranch_005
+    100344: ShrubBlueberryBranch_006
+    100346: ShrubBlueberryBranch_007
+    100348: ShrubBlueberryBranch_008
+    100350: ShrubBlueberryBranch_011
+    100352: ShrubBlueberryBranch_012
+    100354: ShrubBlueberryBranch_013
+    100356: ShrubBlueberryBranch_014
+    100358: ShrubBlueberryBranch_015
+    100360: ShrubBlueberryBranch_016
+    100362: ShrubBlueberryBranch_017
+    100364: ShrubBlueberryBranch_018
+    100366: ShrubBlueberryBranch_019
+    100368: ShrubBlueberryBranch_020
+    100370: ShrubBlueberryBranch_021
+    100372: ShrubBlueberryBranch_022
+    100374: ShrubBlueberryBranch_023
+    100376: ShrubBlueberryBranch_024
+    100378: ShrubBlueberryBranch_025
+    100380: ShrubBlueberryBranch_026
+    100382: ShrubBlueberryBranch_027
+    100384: ShrubBlueberryBranch_028
+    100386: ShrubBlueberryBranch_029
+    100388: ShrubBlueberryBranch_030
+    100390: ShrubBlueberryBranch_031
+    100392: ShrubBlueberryBranch_032
+    100394: ShrubBlueberryBranch_033
+    100396: ShrubBlueberryBranch_034
+    100398: ShrubBlueberryBranch_035
+    100400: ShrubBlueberryBranch_036
+    100402: ShrubBlueberryBranch_037
+    100404: ShrubBlueberryBranch_038
+    100406: ShrubBlueberryBranch_039
+    100408: ShrubBlueberryBranch_040
+    100410: ShrubBlueberryStem
+    100412: ShrubBlueberryStem_001
     400000: //RootNode
     400002: Bottle
     400004: Bottle_001
@@ -339,6 +379,46 @@ ModelImporter:
     400328: LeavesOak_028
     400330: LeavesOak_041
     400332: OakBranch_004
+    400334: ShrubBlueberryBranch
+    400336: ShrubBlueberryBranch_001
+    400338: ShrubBlueberryBranch_002
+    400340: ShrubBlueberryBranch_003
+    400342: ShrubBlueberryBranch_005
+    400344: ShrubBlueberryBranch_006
+    400346: ShrubBlueberryBranch_007
+    400348: ShrubBlueberryBranch_008
+    400350: ShrubBlueberryBranch_011
+    400352: ShrubBlueberryBranch_012
+    400354: ShrubBlueberryBranch_013
+    400356: ShrubBlueberryBranch_014
+    400358: ShrubBlueberryBranch_015
+    400360: ShrubBlueberryBranch_016
+    400362: ShrubBlueberryBranch_017
+    400364: ShrubBlueberryBranch_018
+    400366: ShrubBlueberryBranch_019
+    400368: ShrubBlueberryBranch_020
+    400370: ShrubBlueberryBranch_021
+    400372: ShrubBlueberryBranch_022
+    400374: ShrubBlueberryBranch_023
+    400376: ShrubBlueberryBranch_024
+    400378: ShrubBlueberryBranch_025
+    400380: ShrubBlueberryBranch_026
+    400382: ShrubBlueberryBranch_027
+    400384: ShrubBlueberryBranch_028
+    400386: ShrubBlueberryBranch_029
+    400388: ShrubBlueberryBranch_030
+    400390: ShrubBlueberryBranch_031
+    400392: ShrubBlueberryBranch_032
+    400394: ShrubBlueberryBranch_033
+    400396: ShrubBlueberryBranch_034
+    400398: ShrubBlueberryBranch_035
+    400400: ShrubBlueberryBranch_036
+    400402: ShrubBlueberryBranch_037
+    400404: ShrubBlueberryBranch_038
+    400406: ShrubBlueberryBranch_039
+    400408: ShrubBlueberryBranch_040
+    400410: ShrubBlueberryStem
+    400412: ShrubBlueberryStem_001
     2100000: BarkOak
     2100002: ForestFloor
     2100004: unnamed
@@ -379,6 +459,7 @@ ModelImporter:
     2100074: CherryBlossom
     2100076: CherryBlossomBack
     2100078: LeavesOak
+    2100080: ShrubBlueberryBranch
     2300000: Bottle
     2300002: Bottle_001
     2300004: Bottle_002
@@ -545,6 +626,46 @@ ModelImporter:
     2300326: LeavesOak_028
     2300328: LeavesOak_041
     2300330: OakBranch_004
+    2300332: ShrubBlueberryBranch
+    2300334: ShrubBlueberryBranch_001
+    2300336: ShrubBlueberryBranch_002
+    2300338: ShrubBlueberryBranch_003
+    2300340: ShrubBlueberryBranch_005
+    2300342: ShrubBlueberryBranch_006
+    2300344: ShrubBlueberryBranch_007
+    2300346: ShrubBlueberryBranch_008
+    2300348: ShrubBlueberryBranch_011
+    2300350: ShrubBlueberryBranch_012
+    2300352: ShrubBlueberryBranch_013
+    2300354: ShrubBlueberryBranch_014
+    2300356: ShrubBlueberryBranch_015
+    2300358: ShrubBlueberryBranch_016
+    2300360: ShrubBlueberryBranch_017
+    2300362: ShrubBlueberryBranch_018
+    2300364: ShrubBlueberryBranch_019
+    2300366: ShrubBlueberryBranch_020
+    2300368: ShrubBlueberryBranch_021
+    2300370: ShrubBlueberryBranch_022
+    2300372: ShrubBlueberryBranch_023
+    2300374: ShrubBlueberryBranch_024
+    2300376: ShrubBlueberryBranch_025
+    2300378: ShrubBlueberryBranch_026
+    2300380: ShrubBlueberryBranch_027
+    2300382: ShrubBlueberryBranch_028
+    2300384: ShrubBlueberryBranch_029
+    2300386: ShrubBlueberryBranch_030
+    2300388: ShrubBlueberryBranch_031
+    2300390: ShrubBlueberryBranch_032
+    2300392: ShrubBlueberryBranch_033
+    2300394: ShrubBlueberryBranch_034
+    2300396: ShrubBlueberryBranch_035
+    2300398: ShrubBlueberryBranch_036
+    2300400: ShrubBlueberryBranch_037
+    2300402: ShrubBlueberryBranch_038
+    2300404: ShrubBlueberryBranch_039
+    2300406: ShrubBlueberryBranch_040
+    2300408: ShrubBlueberryStem
+    2300410: ShrubBlueberryStem_001
     3300000: Bottle
     3300002: Bottle_001
     3300004: Bottle_002
@@ -711,6 +832,46 @@ ModelImporter:
     3300326: LeavesOak_028
     3300328: LeavesOak_041
     3300330: OakBranch_004
+    3300332: ShrubBlueberryBranch
+    3300334: ShrubBlueberryBranch_001
+    3300336: ShrubBlueberryBranch_002
+    3300338: ShrubBlueberryBranch_003
+    3300340: ShrubBlueberryBranch_005
+    3300342: ShrubBlueberryBranch_006
+    3300344: ShrubBlueberryBranch_007
+    3300346: ShrubBlueberryBranch_008
+    3300348: ShrubBlueberryBranch_011
+    3300350: ShrubBlueberryBranch_012
+    3300352: ShrubBlueberryBranch_013
+    3300354: ShrubBlueberryBranch_014
+    3300356: ShrubBlueberryBranch_015
+    3300358: ShrubBlueberryBranch_016
+    3300360: ShrubBlueberryBranch_017
+    3300362: ShrubBlueberryBranch_018
+    3300364: ShrubBlueberryBranch_019
+    3300366: ShrubBlueberryBranch_020
+    3300368: ShrubBlueberryBranch_021
+    3300370: ShrubBlueberryBranch_022
+    3300372: ShrubBlueberryBranch_023
+    3300374: ShrubBlueberryBranch_024
+    3300376: ShrubBlueberryBranch_025
+    3300378: ShrubBlueberryBranch_026
+    3300380: ShrubBlueberryBranch_027
+    3300382: ShrubBlueberryBranch_028
+    3300384: ShrubBlueberryBranch_029
+    3300386: ShrubBlueberryBranch_030
+    3300388: ShrubBlueberryBranch_031
+    3300390: ShrubBlueberryBranch_032
+    3300392: ShrubBlueberryBranch_033
+    3300394: ShrubBlueberryBranch_034
+    3300396: ShrubBlueberryBranch_035
+    3300398: ShrubBlueberryBranch_036
+    3300400: ShrubBlueberryBranch_037
+    3300402: ShrubBlueberryBranch_038
+    3300404: ShrubBlueberryBranch_039
+    3300406: ShrubBlueberryBranch_040
+    3300408: ShrubBlueberryStem
+    3300410: ShrubBlueberryStem_001
     4300000: Vert_010
     4300002: Vert_009
     4300004: Grid
@@ -877,6 +1038,46 @@ ModelImporter:
     4300326: LeavesOak_002
     4300328: LeavesOak_001
     4300330: OakBranch_004
+    4300332: ShrubBlueberryBranch_040
+    4300334: ShrubBlueberryBranch_039
+    4300336: ShrubBlueberryBranch_038
+    4300338: ShrubBlueberryBranch_037
+    4300340: ShrubBlueberryBranch_036
+    4300342: ShrubBlueberryBranch_035
+    4300344: ShrubBlueberryBranch_034
+    4300346: ShrubBlueberryBranch_033
+    4300348: ShrubBlueberryBranch_032
+    4300350: ShrubBlueberryBranch_031
+    4300352: ShrubBlueberryBranch_030
+    4300354: ShrubBlueberryBranch_029
+    4300356: ShrubBlueberryBranch_028
+    4300358: ShrubBlueberryBranch_027
+    4300360: ShrubBlueberryBranch_026
+    4300362: ShrubBlueberryBranch_025
+    4300364: ShrubBlueberryBranch_024
+    4300366: ShrubBlueberryBranch_023
+    4300368: ShrubBlueberryBranch_022
+    4300370: ShrubBlueberryBranch_021
+    4300372: ShrubBlueberryBranch_020
+    4300374: ShrubBlueberryBranch_019
+    4300376: ShrubBlueberryBranch_018
+    4300378: ShrubBlueberryBranch_017
+    4300380: ShrubBlueberryBranch_016
+    4300382: ShrubBlueberryBranch_015
+    4300384: ShrubBlueberryBranch_014
+    4300386: ShrubBlueberryBranch_013
+    4300388: ShrubBlueberryBranch_012
+    4300390: ShrubBlueberryBranch_011
+    4300392: ShrubBlueberryBranch_008
+    4300394: ShrubBlueberryBranch_007
+    4300396: ShrubBlueberryBranch_006
+    4300398: ShrubBlueberryBranch_005
+    4300400: ShrubBlueberryBranch_003
+    4300402: ShrubBlueberryBranch_002
+    4300404: ShrubBlueberryBranch_001
+    4300406: ShrubBlueberryBranch
+    4300408: ShrubBlueberryStem
+    4300410: ShrubBlueberryStem_001
     7400000: Default Take
     9500000: //RootNode
   externalObjects: {}
