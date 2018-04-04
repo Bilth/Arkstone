@@ -31,6 +31,7 @@ public class PlayerMotor : MonoBehaviour {
     private float _distToGround = 0f;
 
     private LineRenderer _lineRenderer;
+    private bool _rayGrounded;
 
     private AudioSource _audioSource;
     public AudioClip land;
@@ -312,17 +313,16 @@ public class PlayerMotor : MonoBehaviour {
         }*/
 
         // GRAVITY
-        if(!_doCatchFall)  {
-            //_body.AddForce(new Vector3(0, -30) * (1 / Time.fixedDeltaTime));
-        } else
-        {
-           // NullifyVelocityY();
+        if(_doCatchFall)  {
+            if (_body.velocity.y < 0) { NullifyVelocityY(); }
+        } else {
+            _body.AddForce(Physics.gravity, ForceMode.Acceleration);
         }
 
         // ACHIEVE THRUST SPEED QUICKLY
 
         // NIGHT IS 131C1C
-        
+
         // CALCULATE GROUND ANGLE
         Vector3 tNormal = Vector3.up;
 
@@ -341,6 +341,9 @@ public class PlayerMotor : MonoBehaviour {
 
         Vector3 tPosition = transform.position + new Vector3(0.0f, 0.1f, 0.0f);
         if (Physics.Raycast(tPosition, Vector3.down, out _groundHit, rayLength)) {
+            _isGrounded = true;
+            _rayGrounded = true;
+
             Debug.DrawRay(tPosition, Vector3.down, Color.green);
             _lineRenderer.startColor = Color.green;
             _lineRenderer.endColor = Color.green;
@@ -348,15 +351,15 @@ public class PlayerMotor : MonoBehaviour {
             _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength));
 
             // Stand Up!
-            var tStandingForce = Vector3.up * (rayLength - _groundHit.distance) * -Physics.gravity.y * standMultiplier; // 100 = Water Bob
-            if(tStandingForce.y < -49.2f) //Physics.gravity.y * standMultiplier
-            {
-                Debug.Log("TOO WEAK: " + tStandingForce.y);
-                tStandingForce.y = -49.2f;
-            }
-            _body.AddForce(tStandingForce, ForceMode.Impulse);
-            Debug.Log("STANDING FORCE: " + tStandingForce.y + ", Distance: " + (rayLength - _groundHit.distance));
+            //var tStandingForce = Vector3.up * (rayLength - _groundHit.distance) * -Physics.gravity.y * standMultiplier; // 100 = Water Bob
+
+           // var tStandingForce = Vector3.up * -Physics.gravity.y * (1 / Time.fixedDeltaTime) * 1.7f;
+           // _body.AddForce(tStandingForce, ForceMode.Force);
+            //Debug.Log("STANDING FORCE: " + tStandingForce.y + ", Distance: " + (rayLength - _groundHit.distance));
         } else {
+            _isGrounded = false;
+            _rayGrounded = true;
+
             Debug.DrawRay(tPosition, Vector3.down, Color.red);
             _lineRenderer.startColor = Color.red;
             _lineRenderer.endColor = Color.red;
@@ -364,34 +367,39 @@ public class PlayerMotor : MonoBehaviour {
             _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength));
         }
 
+        if(!_isGrounded && _rayGrounded)
+        {
+            _isGrounded = true;
+        }
+
         //Ray tRay = new Ray(transform.position, Vector3.down); // Camera.main.ScreenPointToRay(Input.mousePosition);
         //RaycastHit tHit;
 
-        //if (Physics.Raycast(transform.position, -Vector3.up, out _groundHit, 100.0f)) {
-        //Debug.DrawLine(tRay.origin, tHit.point);_groundHit
+            //if (Physics.Raycast(transform.position, -Vector3.up, out _groundHit, 100.0f)) {
+            //Debug.DrawLine(tRay.origin, tHit.point);_groundHit
 
-        //}
+            //}
 
-        //Debug.Log(tHit.normal);
+            //Debug.Log(tHit.normal);
 
 
-        /*function Start()
-            {
-                distToGround = collider.bounds.extents.y - collider.center.y;Debug.Log("Hit");
-            }
-
-            function Update()
-            {
-                // assume a range = distToGround + 0.2
-                if (Physics.Raycast(transform.position, -transform.up, hit, distToGround + 0.2))
+            /*function Start()
                 {
-                    normal = hit.normal;
+                    distToGround = collider.bounds.extents.y - collider.center.y;Debug.Log("Hit");
                 }
-            }*/
 
-        // LIMIT THRUST SPEED
+                function Update()
+                {
+                    // assume a range = distToGround + 0.2
+                    if (Physics.Raycast(transform.position, -transform.up, hit, distToGround + 0.2))
+                    {
+                        normal = hit.normal;
+                    }
+                }*/
 
-        float _LEAN_ACCELERATION = 200f;
+            // LIMIT THRUST SPEED
+
+            float _LEAN_ACCELERATION = 200f;
         //if (_lean != Vector3.zero)
         {
             //_lean.x += tHit.normal.x;
@@ -634,6 +642,7 @@ public class PlayerMotor : MonoBehaviour {
 
     public bool CanJump()
     {
+
         return (_isGrounded || _timeAirborne < .2f) && _cooldownJump < 0f;
         // Check if player just landed and automated check hasn't updated
         //CalculateGrounded();
