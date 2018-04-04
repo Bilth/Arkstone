@@ -40,6 +40,7 @@ public class PlayerMotor : MonoBehaviour {
     private Rigidbody _body;
 
     private bool _isGrounded = false;
+    private bool _doCatchFall = false;
     private float _courseStrength = 0f;
     private float _timerCheckAirborne = 0f;
     private float _timeAirborne = 0f;
@@ -50,13 +51,15 @@ public class PlayerMotor : MonoBehaviour {
     private float _cameraRotationLimit = 89f;
     private float _cameraRotationCharge;
     private List<string> _colliders;
+    private List<string> _triggers;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		_body = GetComponent<Rigidbody>();
         _audioSource = GetComponent<AudioSource>();
 
         _colliders = new List<string>();
+        _triggers = new List<string>();
 
         /* _lineRenderer = gameObject.AddComponent<LineRenderer>();
          _lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
@@ -70,8 +73,7 @@ public class PlayerMotor : MonoBehaviour {
          _lineRenderer.startColor = Color.yellow;
          _lineRenderer.endColor = Color.red;*/
 
-        //DrawLine(transform.position, transform.position + new Vector3(0.0f, -1.0f), Color.red, 5);
-        DrawLineHere(transform.position, transform.position + new Vector3(0.0f, -1.0f), Color.red, 5);
+        DrawLine(transform.position, transform.position + new Vector3(0.0f, -0.5f, 0.0f), Color.red, 5);
 
         //_velocity.y = 0;
         _isGrounded = false;
@@ -82,31 +84,16 @@ public class PlayerMotor : MonoBehaviour {
 
     void DrawLine(Vector3 start, Vector3 end, Color color, float duration = 0.2f)
     {
-        GameObject myLine = new GameObject();
-        myLine.transform.position = Vector3.zero; // start;
-        myLine.AddComponent<LineRenderer>();
-        LineRenderer lr = myLine.GetComponent<LineRenderer>();
-        lr.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-        lr.SetColors(color, color);
-        lr.SetWidth(0.1f, 0.2f);
-        lr.SetPosition(0, start);
-        lr.SetPosition(1, end);
-        //GameObject.Destroy(myLine, duration);
-    }
-
-
-    void DrawLineHere(Vector3 start, Vector3 end, Color color, float duration = 0.2f)
-    {
         gameObject.AddComponent<LineRenderer>();
         _lineRenderer = gameObject.GetComponent<LineRenderer>();
-        _lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+        _lineRenderer.material = new Material(Shader.Find("Sprites/Default")); //Particles/Alpha Blended Premultiply
         _lineRenderer.startColor = Color.yellow;
-        _lineRenderer.endColor = Color.red;
-        _lineRenderer.startWidth = .1f;
-        _lineRenderer.endWidth = .5f;
+        _lineRenderer.endColor = Color.blue;
+        _lineRenderer.startWidth = .5f;
+        _lineRenderer.endWidth = 0.0f;
         _lineRenderer.SetPosition(0, start);
         _lineRenderer.SetPosition(1, end);
-        //GameObject.Destroy(myLine, duration);
+        _lineRenderer.sortingOrder = 1;
     }
 
     // Gets a movement vector
@@ -139,9 +126,24 @@ public class PlayerMotor : MonoBehaviour {
         float tVelocityY = GetComponent<Rigidbody>().velocity.y;
 
         // Float
-        if (_courseStrength > 0 && tVelocityY < 0) {
+        /*if (_courseStrength > 0 && tVelocityY < 0) {
             float tReversingForce = -tVelocityY * .2f * _courseStrength; //ITEM VARIABLE (.1, .2, .3, .4)
             _body.AddForce(new Vector3(0, tReversingForce, 0), ForceMode.VelocityChange);
+        }*/
+
+        // Catch Fall
+        if(tVelocityY < 0 && _doCatchFall)
+        {
+            //NullifyVelocityY();
+
+
+            /*Vector3 tVelocity = _body.velocity;
+            tVelocity.y = 0;
+            _body.velocity = tVelocity;*/
+
+            //float tReversingForce = -tVelocityY;
+            //_body.AddForce(new Vector3(0, tReversingForce * _body.mass), ForceMode.Impulse);
+            //_body.AddForce(-Physics.gravity, ForceMode.Acceleration);
         }
 
         // Lift
@@ -165,7 +167,38 @@ public class PlayerMotor : MonoBehaviour {
 		_performRotation ();
 	}
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collider)
+    {
+        if (_triggers == null) return;
+
+        _doCatchFall = true;
+        _isGrounded = true;
+        //NullifyVelocityY();
+        //_body.AddForce(-Physics.gravity, ForceMode.Acceleration);
+
+        string tName = collider.transform.name;
+        Debug.Log("Trigger against " + tName);
+
+        _triggers.Add(tName);
+    }
+
+    void OnTriggerExit(Collider collider)
+    {
+        if (_triggers == null) return;
+        
+        string tName = collider.transform.name;
+        _triggers.Remove(tName);
+
+        if (_triggers.Count == 0)
+        {
+            _doCatchFall = false;
+            _isGrounded = false;
+        }
+
+        Debug.Log("Exit: " + tName + ", " + _triggers.Count);
+    }
+
+        void OnCollisionEnter(Collision collision)
     {
         if (_colliders == null) return;
 
@@ -180,7 +213,7 @@ public class PlayerMotor : MonoBehaviour {
             // Check Feet
             //if(Physics.Raycast(_body.GetComponent<Transform>().position, new Vector3(0, -1, 0), _distToGround + .2f))
             {
-                _isGrounded = true;
+              /*  _isGrounded = true;
                 _timeAirborne = 0f;
 
                 Debug.Log("Velocity Y: " + collision.relativeVelocity.magnitude);
@@ -190,7 +223,7 @@ public class PlayerMotor : MonoBehaviour {
                 {
                     _audioSource.time = .9f;
                     _audioSource.PlayOneShot(land, .1f);
-                }
+                }*/
             }
         }
 
@@ -212,10 +245,10 @@ public class PlayerMotor : MonoBehaviour {
         string tName = collision.collider.transform.name;
         _colliders.Remove(tName);
 
-        if(_colliders.Count == 0)
+        /*if(_colliders.Count == 0)
         {
             _isGrounded = false;
-        }
+        }*/
 
         Debug.Log("Exit: " + tName + ", " + _colliders.Count);
         
@@ -278,6 +311,14 @@ public class PlayerMotor : MonoBehaviour {
             Debug.Log("Z: " + Mathf.Round(GetComponent<Rigidbody>().velocity.z * 10000000000));
         }*/
 
+        // GRAVITY
+        if(!_doCatchFall)  {
+            //_body.AddForce(new Vector3(0, -30) * (1 / Time.fixedDeltaTime));
+        } else
+        {
+           // NullifyVelocityY();
+        }
+
         // ACHIEVE THRUST SPEED QUICKLY
 
         // NIGHT IS 131C1C
@@ -295,24 +336,33 @@ public class PlayerMotor : MonoBehaviour {
             Debug.DrawLine(Vector3.zero, Vector3.)
         }*/
 
-        if (Physics.Raycast(transform.position, Vector3.down, out _groundHit, 2.0f)) {
-            Debug.DrawRay(transform.position, Vector3.down, Color.red);
-            //_lineRenderer.startColor = Color.yellow;
-            //_lineRenderer.endColor = Color.green;
-            _lineRenderer.SetPosition(0, transform.position);
-            _lineRenderer.SetPosition(1, transform.position + new Vector3(0, -1.0f));
-        } else
-        {
-            Debug.DrawRay(transform.position, Vector3.down, Color.blue);
-            //_lineRenderer.startColor = Color.yellow;
-            //_lineRenderer.endColor = Color.red;
-            _lineRenderer.SetPosition(0, transform.position);
-            _lineRenderer.SetPosition(1, transform.position + new Vector3(0, -1.0f));
+        float rayLength = 1.5f;
+        float standMultiplier = 1.25f;
+
+        Vector3 tPosition = transform.position + new Vector3(0.0f, 0.1f, 0.0f);
+        if (Physics.Raycast(tPosition, Vector3.down, out _groundHit, rayLength)) {
+            Debug.DrawRay(tPosition, Vector3.down, Color.green);
+            _lineRenderer.startColor = Color.green;
+            _lineRenderer.endColor = Color.green;
+            _lineRenderer.SetPosition(0, tPosition);
+            _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength));
+
+            // Stand Up!
+            var tStandingForce = Vector3.up * (rayLength - _groundHit.distance) * -Physics.gravity.y * standMultiplier; // 100 = Water Bob
+            if(tStandingForce.y < -49.2f) //Physics.gravity.y * standMultiplier
+            {
+                Debug.Log("TOO WEAK: " + tStandingForce.y);
+                tStandingForce.y = -49.2f;
+            }
+            _body.AddForce(tStandingForce, ForceMode.Impulse);
+            Debug.Log("STANDING FORCE: " + tStandingForce.y + ", Distance: " + (rayLength - _groundHit.distance));
+        } else {
+            Debug.DrawRay(tPosition, Vector3.down, Color.red);
+            _lineRenderer.startColor = Color.red;
+            _lineRenderer.endColor = Color.red;
+            _lineRenderer.SetPosition(0, tPosition);
+            _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength));
         }
-
-
-
-
 
         //Ray tRay = new Ray(transform.position, Vector3.down); // Camera.main.ScreenPointToRay(Input.mousePosition);
         //RaycastHit tHit;
