@@ -312,7 +312,7 @@ public class PlayerMotor : MonoBehaviour {
             Debug.Log("Z: " + Mathf.Round(GetComponent<Rigidbody>().velocity.z * 10000000000));
         }*/
 
-        // GRAVITY
+        // Gravity - Falling Force
         if(_doCatchFall)  {
             if (_body.velocity.y < 0) { NullifyVelocityY(); }
         } else {
@@ -337,9 +337,10 @@ public class PlayerMotor : MonoBehaviour {
         }*/
 
         float rayLength = 1.5f;
-        float standMultiplier = 1.25f;
+        float standMultiplier = 5f;
+        float rayPenetration = 0f;
 
-        Vector3 tPosition = transform.position + new Vector3(0.0f, 0.1f, 0.0f);
+        Vector3 tPosition = transform.position + new Vector3(0.0f, 0.0f, 0.0f);
         if (Physics.Raycast(tPosition, Vector3.down, out _groundHit, rayLength)) {
             _isGrounded = true;
             _rayGrounded = true;
@@ -350,12 +351,18 @@ public class PlayerMotor : MonoBehaviour {
             _lineRenderer.SetPosition(0, tPosition);
             _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength));
 
+            rayPenetration = (rayLength - _groundHit.distance) / rayLength;
+
             // Stand Up!
-            //var tStandingForce = Vector3.up * (rayLength - _groundHit.distance) * -Physics.gravity.y * standMultiplier; // 100 = Water Bob
+            var tStandingForce = Vector3.up * rayPenetration * standMultiplier * standMultiplier; // 100 = Water Bob
 
            // var tStandingForce = Vector3.up * -Physics.gravity.y * (1 / Time.fixedDeltaTime) * 1.7f;
-           // _body.AddForce(tStandingForce, ForceMode.Force);
-            //Debug.Log("STANDING FORCE: " + tStandingForce.y + ", Distance: " + (rayLength - _groundHit.distance));
+           /*if(tStandingForce.y > 2)
+            {
+                _body.AddForce(tStandingForce, ForceMode.VelocityChange);
+            }*/
+           
+            Debug.Log("STANDING FORCE: " + tStandingForce.y + ", Pen: " + rayPenetration);
         } else {
             _isGrounded = false;
             _rayGrounded = true;
@@ -428,11 +435,11 @@ public class PlayerMotor : MonoBehaviour {
              * NIGHT 
              * Light 000810FF 1.14
              * Scene 000000*/
-            
+
             // Existing Momentum (Velocity
-            _momentum = _body.velocity.normalized; // Use real player velocity
-            _momentum.y = 0; // Ignore vertical velocity in calculations
-            _momentumMagnitude = _body.velocity.magnitude;
+            //_momentum = _body.velocity.normalized; // Use real player velocity
+            //_momentum.y = 0; // Ignore vertical velocity in calculations
+            //_momentumMagnitude = _body.velocity.magnitude;
 
             // *** GROUND SLOPE ***
             /*if (_isGrounded)
@@ -448,26 +455,45 @@ public class PlayerMotor : MonoBehaviour {
             //_body.velocity = _velocityWork;
 
             // *** MOMENTUM ***
-            _momentum *= _momentumMagnitude;
-            
-            _momentum.y = _body.velocity.y; //Preserve Y
-            _body.velocity = _momentum;
+            // _momentum *= _momentumMagnitude;
+
+            //_momentum.y = _body.velocity.y; //Preserve Y
+            // _body.velocity = _momentum;
 
             // *** DRAG ***
-            if(_timeAirborne < .5f)
+            /*if(_isGrounded) //_timeAirborne < .5f
             {
+                // Vector3 tWorkingVelocity = _body.velocity;
+                //tWorkingVelocity.x *= .95f;// / Time.fixedDeltaTime;
+                //tWorkingVelocity.z *= .95f;// / Time.fixedDeltaTime;
+                //_body.velocity = tWorkingVelocity;
+
                 //1.5f, .5f
                 // As lean approaches 80, slow it down
-                float tDrag = -.2f;// -.3f; // Of Magnitude, 0f for Riding Crystal
-                float tSpeed = 1.3f;// + (_isGrounded ? (Input.GetAxisRaw("Course") * .25f) : 0); //1.5f, 1f: 7f for Riding Crystal
-                float tGroundDrag = (tDrag * _momentumMagnitude) + tSpeed;
-                if(tGroundDrag < 0) { tGroundDrag = 0; }
+                //float tDrag = -.2f;// -.3f; // Of Magnitude, 0f for Riding Crystal
+                //float tSpeed = 1.3f;// + (_isGrounded ? (Input.GetAxisRaw("Course") * .25f) : 0); //1.5f, 1f: 7f for Riding Crystal
+                //float tGroundDrag = (tDrag * _momentumMagnitude) + tSpeed;
+                // if(tGroundDrag < 0) { tGroundDrag = 0; }
                 //Debug.Log("Drag: " + tGroundDrag + ", Momentum: " + _momentumMagnitude);
+                float tGroundDrag = 1f;
                 _body.velocity += (_lean * tGroundDrag);
             } else if (_colliders.Count == 0)
             {
                 _body.velocity += (_lean * .1f); // Slight Air Movement
+            }*/
+
+            //_lean *= 5.0f;
+
+            // *** NEW MOVEMENT
+            if (_isGrounded)
+            {
+                _lean.y = _body.velocity.y;
+                //_lean.x *= 5.0f;
+                //_lean.z *= 5.0f;
+                //Debug.Log("Lean: " + _lean);
+                _body.velocity = _lean;
             }
+            
 
             // *** CLIMBING ***
 

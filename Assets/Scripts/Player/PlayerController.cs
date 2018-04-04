@@ -45,6 +45,7 @@ public class PlayerController : MonoBehaviour {
         tLean.y = 0;
 
         // Apply Lean
+        tLean *= 5f;
          _motor.Lean(tLean);
 
         Vector2 cameraInput;
