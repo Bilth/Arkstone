@@ -43,6 +43,7 @@ public class PlayerMotor : MonoBehaviour {
     private bool _isGrounded = false;
     private bool _doCatchFall = false;
     private float _courseStrength = 0f;
+    private float _courseCharge = 0f;
     private float _timerCheckAirborne = 0f;
     private float _timeAirborne = 0f;
     private float _cooldownJump = 0f;
@@ -94,8 +95,8 @@ public class PlayerMotor : MonoBehaviour {
             Debug.Log("GROUNDED!");
 
             _timeAirborne = 0f;
-            _audioSource.time = .9f;
-            _audioSource.PlayOneShot(land, .1f);
+            //_audioSource.time = .9f;
+            //_audioSource.PlayOneShot(land, .1f);
 
             var tDampener = GetComponent<ControlDampener>();
             if (tDampener != null)
@@ -126,9 +127,33 @@ public class PlayerMotor : MonoBehaviour {
         transform.position = tSpawnPoint.position;
         transform.rotation = tSpawnPoint.rotation;
     }
-    
-	// Run every physics iteration
-	void FixedUpdate () {
+
+    void Update()
+    {
+        if(_courseStrength > 0)
+        {
+            _courseCharge += Time.deltaTime;
+            Debug.Log("CHARGE: " + _courseCharge);
+        } else if(_courseCharge > 0)
+        {
+            var tDampener = GetComponent<ControlDampener>();
+            if (tDampener != null)
+            {
+                tDampener.AddDampener(1f);
+            }
+
+            Debug.Log("DISCHARGE: " + _courseCharge);
+
+            // Discharge Energy
+            _body.AddForce(Camera.main.transform.forward * 200f * _courseCharge, ForceMode.Impulse);
+
+            _courseCharge = 0;
+        }
+        
+    }
+
+    // Run every physics iteration
+    void FixedUpdate () {
         _courseStrength = Input.GetAxisRaw("Course");
 
         float tVelocityY = GetComponent<Rigidbody>().velocity.y;
@@ -231,60 +256,29 @@ public class PlayerMotor : MonoBehaviour {
     // Perform movement based on velocity variable
     void _performMovement() {
 
-        // Debug.Log("RB Velocity Y: " + GetComponent<Rigidbody>().velocity.y);
-
-        // Check Airborne Status
-        /*_timerCheckAirborne -= Time.deltaTime;
-        //if (_timerCheckAirborne < 0f) { CalculateGrounded(); _timerCheckAirborne += TIME_CHECK_GROUNDED; }
-        if (isGrounded) {
-            _timeAirborne = 0f;
-        } else {
-            _timeAirborne += Time.deltaTime;
-        }*/
-
-        if(!_isGrounded)
-        {
-            _timeAirborne += Time.deltaTime;
-        }
-        
-
+        if(!_isGrounded)  { _timeAirborne += Time.deltaTime; }
         _cooldownJump -= Time.deltaTime;
 
-        // Anti-Gravity
-        // Vector3 _velocityModified = _velocity;
-        // if(_velocity.y > 0) { _velocityModified.y *= _courseStrength; }
-        //_velocity = _velocityModified;
-        //float tLiftingForce = -GetComponent<Rigidbody>().velocity.y * _courseStrength;
-        //Debug.Log("VY: " + GetComponent<Rigidbody>().velocity.y + ", Lifting Force: " + tLiftingForce);
-        //_body.AddForce(new Vector3(0, tLiftingForce * _body.mass), ForceMode.Impulse);
-
-        //if(_velocity.y >)
-
-        /*if(_isGrounded)
-        {
-            _velocity.y = 0;
-        } else
-        {
-            _velocity.y += GRAVITY * Time.deltaTime;
-        }*/
-
-        //Debug.Log("VY: " + _velocity.y);
-
-        // MOVE-BASED VELOCITY (NO PHYSICS)
-        /*if (_velocity != Vector3.zero) {
-			// Performs collision checks when trying to move and easier to control than addForce
-			_body.MovePosition(_body.position + _velocity * Time.deltaTime);
-            Debug.Log("Z: " + Mathf.Round(GetComponent<Rigidbody>().velocity.z * 10000000000));
-        }*/
-
-        // Gravity - Falling Force
+        // Gravity - Falling force
         if(_doCatchFall)  {
             if (_body.velocity.y < 0) { NullifyVelocityY(); }
         } else {
             _body.AddForce(Physics.gravity, ForceMode.Acceleration);
         }
 
-        // ACHIEVE THRUST SPEED QUICKLY
+        // Glide - Coursing catches fall
+        if(_courseStrength > 0 && _body.velocity.y < 0)
+        {
+            // *** PID *** Gradual catch
+            float tMaxCourseFall = -1f; // 1m/s
+            if(_body.velocity.y < tMaxCourseFall)
+            {
+                var tVelocity = _body.velocity;
+                tVelocity.y = tMaxCourseFall;
+
+                _body.velocity = tVelocity;
+            }
+        }
 
         // NIGHT IS 131C1C
 
