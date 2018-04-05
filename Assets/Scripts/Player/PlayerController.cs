@@ -54,8 +54,19 @@ public class PlayerController : MonoBehaviour {
         {
             tLean *= tSpeed;
         }
-        
-         _motor.Lean(tLean);
+
+        var tDampener = GetComponent<ControlDampener>();
+        if (tDampener != null)
+        {
+            if(tDampener.Multiplier != 1.0f)
+            {
+                tLean *= tDampener.Multiplier;
+                Debug.Log("DAMPENING: " + tDampener.Multiplier);
+            }
+            
+        }
+
+        _motor.Lean(tLean);
 
         Vector2 cameraInput;
 

@@ -62,21 +62,8 @@ public class PlayerMotor : MonoBehaviour {
         _colliders = new List<string>();
         _triggers = new List<string>();
 
-        /* _lineRenderer = gameObject.AddComponent<LineRenderer>();
-         _lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
-         _lineRenderer.startWidth = .2f;
-         _lineRenderer.endWidth = .1f;
-         _lineRenderer.widthMultiplier = 0.2f;
-         _lineRenderer.positionCount = 2;
-         _lineRenderer.sortingOrder = 1;
-         _lineRenderer.SetPosition(0, transform.position);
-         _lineRenderer.SetPosition(1, new Vector3(transform.position.x - 1.0f, transform.position.y));
-         _lineRenderer.startColor = Color.yellow;
-         _lineRenderer.endColor = Color.red;*/
-
         DrawLine(transform.position, transform.position + new Vector3(0.0f, -0.5f, 0.0f), Color.red, 5);
-
-        //_velocity.y = 0;
+        
         _isGrounded = false;
         _speed = SPEED_BASE;
 
@@ -97,7 +84,27 @@ public class PlayerMotor : MonoBehaviour {
         _lineRenderer.sortingOrder = 1;
     }
 
-    // Gets a movement vector
+    public void SetGrounded(bool pValue = true)
+    {
+        if(_rayGrounded && pValue == false) { return; } // Ignore if raycast still grounded 
+
+        _isGrounded = pValue;
+        if (_isGrounded)
+        {
+            Debug.Log("GROUNDED!");
+
+            _timeAirborne = 0f;
+            _audioSource.time = .9f;
+            _audioSource.PlayOneShot(land, .1f);
+
+            var tDampener = GetComponent<ControlDampener>();
+            if (tDampener != null)
+            {
+                tDampener.Clear();
+            }
+        }
+    }
+    
     public void Lean(Vector3 pLean) {
         _lean = pLean;
 	}
@@ -119,51 +126,14 @@ public class PlayerMotor : MonoBehaviour {
         transform.position = tSpawnPoint.position;
         transform.rotation = tSpawnPoint.rotation;
     }
-
-
+    
 	// Run every physics iteration
 	void FixedUpdate () {
         _courseStrength = Input.GetAxisRaw("Course");
 
         float tVelocityY = GetComponent<Rigidbody>().velocity.y;
-
-        // Float
-        /*if (_courseStrength > 0 && tVelocityY < 0) {
-            float tReversingForce = -tVelocityY * .2f * _courseStrength; //ITEM VARIABLE (.1, .2, .3, .4)
-            _body.AddForce(new Vector3(0, tReversingForce, 0), ForceMode.VelocityChange);
-        }*/
-
-        // Catch Fall
-        if(tVelocityY < 0 && _doCatchFall)
-        {
-            //NullifyVelocityY();
-
-
-            /*Vector3 tVelocity = _body.velocity;
-            tVelocity.y = 0;
-            _body.velocity = tVelocity;*/
-
-            //float tReversingForce = -tVelocityY;
-            //_body.AddForce(new Vector3(0, tReversingForce * _body.mass), ForceMode.Impulse);
-            //_body.AddForce(-Physics.gravity, ForceMode.Acceleration);
-        }
-
-        // Lift
-        /*if(_courseStrength > 0)
-        {
-            _body.AddForce(new Vector3(0, _gravity * _courseStrength + , 0), ForceMode.VelocityChange);
-        }*/
-
-        /*if (_courseStrength > 0)
-        {
-            _body.AddForce(new Vector3(0, 0, 0));
-        }*/
-
-        //_speed = SPEED_BASE + _courseStrength * SPEED_BASE;
-
-        //if (_isGrounded) {
-        _speed = SPEED_BASE;// + (SPEED_BOOST * _courseStrength); //ITEM VARIABLE
-       // }
+        
+        _speed = SPEED_BASE;
 
         _performMovement ();
 		_performRotation ();
@@ -172,16 +142,12 @@ public class PlayerMotor : MonoBehaviour {
     void OnTriggerEnter(Collider collider)
     {
         if (_triggers == null) return;
+        
+        string tName = collider.transform.name;
+        _triggers.Add(tName);
 
         _doCatchFall = true;
-        _isGrounded = true;
-        //NullifyVelocityY();
-        //_body.AddForce(-Physics.gravity, ForceMode.Acceleration);
-
-        string tName = collider.transform.name;
-        Debug.Log("Trigger against " + tName);
-
-        _triggers.Add(tName);
+        SetGrounded();
     }
 
     void OnTriggerExit(Collider collider)
@@ -194,10 +160,8 @@ public class PlayerMotor : MonoBehaviour {
         if (_triggers.Count == 0)
         {
             _doCatchFall = false;
-            _isGrounded = false;
+            SetGrounded(false);
         }
-
-        Debug.Log("Exit: " + tName + ", " + _triggers.Count);
     }
 
         void OnCollisionEnter(Collision collision)
@@ -367,9 +331,9 @@ public class PlayerMotor : MonoBehaviour {
                  _body.AddForce(tStandingForce, ForceMode.VelocityChange);
              }*/
 
-            Debug.Log("STANDING FORCE: " + tStandingForce.y + ", Pen: " + rayPenetration);
+            //Debug.Log("STANDING FORCE: " + tStandingForce.y + ", Pen: " + rayPenetration);
         } else {
-            _isGrounded = false;
+            SetGrounded(false);
             _rayGrounded = false;
 
             Debug.DrawRay(tPosition, Vector3.down, Color.red);
@@ -381,7 +345,7 @@ public class PlayerMotor : MonoBehaviour {
 
         if(!_isGrounded && _rayGrounded)
         {
-            _isGrounded = true;
+            SetGrounded(true);
         }
 
         //Ray tRay = new Ray(transform.position, Vector3.down); // Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -408,43 +372,10 @@ public class PlayerMotor : MonoBehaviour {
                         normal = hit.normal;
                     }
                 }*/
-
-            // LIMIT THRUST SPEED
-
-            float _LEAN_ACCELERATION = 200f;
-        //if (_lean != Vector3.zero)
-        {
-            //_lean.x += tHit.normal.x;
-            //_lean.z += tHit.normal.z;
-            //_lean.y = .2f;
-            /* float tX = _lean.x;
-            float tY = 0;
-            float tZ = _lean.z;
-
-           _velocityPlanar.x = _body.velocity.x;
-            _velocityPlanar.z = _body.velocity.z;
-            _velocityPlanar.y = 0;
-
-            Debug.Log("LEAN: " + tX + ", " + tY + ", " + tZ + ", " + _velocityPlanar.magnitude);*/
-
-            /*if (!isGrounded && (Input.GetAxisRaw("Course") > 0))
-            {
-                Debug.Log("NULLIFY FOR FLOAT");
-                NullifyVelocityX();
-                NullifyVelocityZ();
-            }*/
-
-            //if (_isGrounded)
-
+            
             /*
              * NIGHT 
-             * Light 000810FF 1.14
-             * Scene 000000*/
-
-            // Existing Momentum (Velocity
-            //_momentum = _body.velocity.normalized; // Use real player velocity
-            //_momentum.y = 0; // Ignore vertical velocity in calculations
-            //_momentumMagnitude = _body.velocity.magnitude;
+             * Light 000810FF 1.14 */
 
             // *** GROUND SLOPE ***
             /*if (_isGrounded)
@@ -453,111 +384,35 @@ public class PlayerMotor : MonoBehaviour {
                 _lean.z += tHit.normal.z;
 
             }*/
+        
+        // > Faster downhill
+        // > Smoother downhill
+        // + No momentum
+        // + Complete Control
+        // + Full Air Control
+        // + No Drag
+        // + No Run button that needs to be constantly held
+        _lean.y = _body.velocity.y;
 
-            //_momentum *= (_TERMINAL_VELOCITY_HORIZONTAL * _lean.magnitude); // Move based on lean
-
-
-            //_body.velocity = _velocityWork;
-
-            // *** MOMENTUM ***
-            // _momentum *= _momentumMagnitude;
-
-            //_momentum.y = _body.velocity.y; //Preserve Y
-            // _body.velocity = _momentum;
-
-            // *** DRAG ***
-            /*if(_isGrounded) //_timeAirborne < .5f
+        var tDampener = GetComponent<ControlDampener>();
+        if (tDampener != null)
+        {
+            if (tDampener.Multiplier != 1.0f)
             {
-                // Vector3 tWorkingVelocity = _body.velocity;
-                //tWorkingVelocity.x *= .95f;// / Time.fixedDeltaTime;
-                //tWorkingVelocity.z *= .95f;// / Time.fixedDeltaTime;
-                //_body.velocity = tWorkingVelocity;
-
-                //1.5f, .5f
-                // As lean approaches 80, slow it down
-                //float tDrag = -.2f;// -.3f; // Of Magnitude, 0f for Riding Crystal
-                //float tSpeed = 1.3f;// + (_isGrounded ? (Input.GetAxisRaw("Course") * .25f) : 0); //1.5f, 1f: 7f for Riding Crystal
-                //float tGroundDrag = (tDrag * _momentumMagnitude) + tSpeed;
-                // if(tGroundDrag < 0) { tGroundDrag = 0; }
-                //Debug.Log("Drag: " + tGroundDrag + ", Momentum: " + _momentumMagnitude);
-                float tGroundDrag = 1f;
-                _body.velocity += (_lean * tGroundDrag);
-            } else if (_colliders.Count == 0)
+                // *** PID *** Allows for increasing control 
+            }
+            else
             {
-                _body.velocity += (_lean * .1f); // Slight Air Movement
-            }*/
-
-            //_lean *= 5.0f;
-
-            // *** NEW MOVEMENT
-           // if (_isGrounded)
-            {
-                _lean.y = _body.velocity.y;
-                //_lean.x *= 5.0f;
-                //_lean.z *= 5.0f;
-                //Debug.Log("Lean: " + _lean);
+                // *** PID *** Modify velocity instead of set 
                 _body.velocity = _lean;
             }
-            
-
-            // *** CLIMBING ***
-
-            // START HERE - Current is too fast top speed but slowing it down causes really fast warping possibly
-            // because character is flipping negative and continues exponentially. Check if negative and ignore?
-            // Also, factor in sprint/run button so you can accurately gauge a fast run
-            /*
-             * if(_isGrounded)
-            {
-                // As lean approaches 80, slow it down
-                float tGroundDrag = (-.5f * _momentumMagnitude) + 4f; //0.25
-                Debug.Log("Drag: " + tGroundDrag + ", Momentum: " + _momentumMagnitude);
-                //if(_lean * tGroundDrag)
-                _body.velocity += (_lean * 1f);
-                _lean.z *= -1f;
-                _lean.x *= -1f;
-                _lean.y = 0;
-                _body.velocity -= (_lean * tGroundDrag);
-            }*/
- 
-            /*if (isGrounded)
-            {
-                if (_velocityWork.magnitude * _TERMINAL_VELOCITY_HORIZONTAL * _lean.magnitude > _TERMINAL_VELOCITY_HORIZONTAL)
-                {
-                   // Debug.Log("Velocity below threshold: " + _velocityWork.magnitude + " of " + _TERMINAL_VELOCITY_HORIZONTAL);
-                    
-                        _velocityWork *= (_TERMINAL_VELOCITY_HORIZONTAL * _lean.magnitude);
-                        _velocityWork.y = _body.velocity.y; //Preserve Y
-                        _body.velocity = _velocityWork;
-
-                        Debug.Log("Set velocity to: " + _velocityWork);
-
-                        //_body.
-                        //_body.AddForce(_lean * _LEAN_ACCELERATION, ForceMode.Force);
-                        //_body.velocity = _TERMINAL_VELOCITY_HORIZONTAL * (_body.velocity.normalized);
-                
-                } else
-                {
-                    _velocityWork.y = _body.velocity.y; //Preserve Y
-                    _body.velocity = _velocityWork * _TERMINAL_VELOCITY_HORIZONTAL;// _lean * _TERMINAL_VELOCITY_HORIZONTAL;
-                    //var tDiffX
-                    //_body.AddForce(_lean * 5f, ForceMode.Force);
-                }
-
-                Debug.Log("Velocity: " + _body.velocity.magnitude);
-            }*/
-
         }
-
-        /*if(_thrusterForce != Vector3.zero)
-        {
-            //Force Mode acceleration takes mass out of the equation
-            _body.AddForce(_thrusterForce, ForceMode.Acceleration);
-
-            _thrusterForce = Vector3.zero;
-        }*/
+        
     }
 
 	void _performRotation() {
+
+        // VR Chunked Rotation
         if(UnityEngine.XR.XRSettings.enabled)
         {
             _cameraRotationCharge += _rotate.y;
@@ -571,43 +426,17 @@ public class PlayerMotor : MonoBehaviour {
         }
         
 
-        /*_cameraRotationCharge += (_rotate.y);
-        Debug.Log("Rotation Charge Pre: " + _cameraRotationCharge);
-        if (Mathf.Abs(_cameraRotationCharge) < 22.5f) {
-            Debug.Log("Returning");
-            return;
-        }
-
-        if(_cameraRotationCharge > 0)
-        {
-            _rotate.y = 22.5f;
-            _cameraRotationCharge -= _rotate.y;
-        } else
-        {
-            _rotate.y = -22.5f;
-            _cameraRotationCharge -= _rotate.y;
-        }
-
-        Debug.Log("Rotation Charge Pos: " + _cameraRotationCharge);*/
-
-        //_rotate.y += (_cameraRotationCharge < 0 ? -22.5f : 22.5f);// _cameraRotationCharge;
-        //_cameraRotationCharge -= _rotate.y;
-
         _body.MoveRotation (_body.rotation * Quaternion.Euler(_rotate));
 		if (_cam != null) {
+
             // Set our rotation and clamp it
             _cameraRotationXCurrent -= _cameraRotationX;
             _cameraRotationXCurrent = Mathf.Clamp(_cameraRotationXCurrent, - _cameraRotationLimit, _cameraRotationLimit);
-           // Debug.Log("Camera Rotation X: " + _cameraRotationXCurrent);
 
             // Apply our rotation to the transform of the camera
             // Since camera is a child of player, it's always going to have only x rotation, with 0 y and z. No quaternians needed
             _cam.transform.localEulerAngles = new Vector3(_cameraRotationXCurrent, 0f, 0f);
-			//_cam.transform.Rotate(-_cameraRotation);
-		} else
-        {
-            Debug.Log("Camera is null");
-        }
+		}
 	}
 
     public float fallingForce()
@@ -616,8 +445,6 @@ public class PlayerMotor : MonoBehaviour {
     }
 
     private void CalculateGrounded() {
-        //if (_body.velocity.y > 0) { _isGrounded = false; return; }
-
         bool tGrounded = false;
 
         if (_body != null)
@@ -631,8 +458,8 @@ public class PlayerMotor : MonoBehaviour {
             if(!_isGrounded)
             {
                 _isGrounded = true;
-                _audioSource.time = .9f;
-                _audioSource.PlayOneShot(land, .1f);
+                //_audioSource.time = .9f;
+                //_audioSource.PlayOneShot(land, .1f);
             }
             
         } else
@@ -647,7 +474,7 @@ public class PlayerMotor : MonoBehaviour {
 
     public void CoolJump()
     {
-        _cooldownJump = .2f;
+        _cooldownJump = .75f;
     }
 
     public void Jump()
@@ -655,13 +482,9 @@ public class PlayerMotor : MonoBehaviour {
         NullifyVelocityY();
 
         Vector3 tJumpForce = Vector3.up;
-        //tJumpForce.x = _lean.x * .3f;// * .5f + _groundHit.normal.x;
-        //tJumpForce.z = _lean.z;// * .5f + _groundHit.normal.z;
         tJumpForce *= 200f; // 650f
         _body.AddForce(tJumpForce, ForceMode.Impulse);
         CoolJump();
-        //isGrounded = false;
-        //_timeAirborne = 0f;
     }
 
     // Get a force vector for our thrusters
@@ -674,10 +497,10 @@ public class PlayerMotor : MonoBehaviour {
     public bool CanJump()
     {
 
-        return (_isGrounded || _timeAirborne < .2f) && _cooldownJump < 0f;
+        //return (_isGrounded || _timeAirborne < .2f) && _cooldownJump < 0f;
         // Check if player just landed and automated check hasn't updated
         //CalculateGrounded();
-        return Physics.Raycast(_body.GetComponent<Transform>().position, new Vector3(0, -1, 0), _distToGround + .2f);
+        //return Physics.Raycast(_body.GetComponent<Transform>().position, new Vector3(0, -1, 0), _distToGround + .2f);
 
         //return true;
 
