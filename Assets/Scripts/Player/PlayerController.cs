@@ -44,13 +44,15 @@ public class PlayerController : MonoBehaviour {
         //Debug.Log("LEAN: " + tLean);
         tLean.y = 0;
 
+        var tSpeed = 4.0f; // 4 Meters / Second
+
         // Apply Lean
         if(_motor.isGrounded)
         {
-            tLean *= 5f;
+            tLean *= tSpeed;
         } else
         {
-            tLean *= 5f;
+            tLean *= tSpeed;
         }
         
          _motor.Lean(tLean);
