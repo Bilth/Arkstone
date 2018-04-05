@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &114942
 GameObject:
   m_ObjectHideFlags: 1
@@ -136,7 +136,7 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &168222
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
@@ -207,12 +207,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 168222}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.162, y: 0.014, z: 0.053}
+  m_LocalRotation: {x: -0, y: 0.11052306, z: -0, w: 0.9938736}
+  m_LocalPosition: {x: 0.044639587, y: 0.51399994, z: 0.4170189}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 487102}
-  m_Father: {fileID: 452124}
+  m_Father: {fileID: 452730}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &430828
@@ -248,7 +248,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 157886}
   m_LocalRotation: {x: -0, y: 0.11052306, z: -0, w: 0.9938736}
-  m_LocalPosition: {x: -0.12504578, y: 0.5, z: -2}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4000010373200944}
@@ -256,7 +256,6 @@ Transform:
   - {fileID: 430828}
   - {fileID: 432674}
   - {fileID: 4613570406246172}
-  - {fileID: 411550}
   - {fileID: 4364574695141904}
   - {fileID: 4332220294016786}
   m_Father: {fileID: 452730}
@@ -268,8 +267,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 133418}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 21.596933, y: 33.75, z: -30.59333}
+  m_LocalRotation: {x: -0, y: 0.9843408, z: -0, w: 0.17627619}
+  m_LocalPosition: {x: -37.333374, y: -16.982, z: 80.90668}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 454518}
@@ -277,6 +276,7 @@ Transform:
   - {fileID: 4000013241296820}
   - {fileID: 452124}
   - {fileID: 4278247388308032}
+  - {fileID: 411550}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -300,7 +300,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 125044}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1, y: 0, z: 0.485}
+  m_LocalPosition: {x: -1.2169095, y: 0.0000008940697, z: 0.50960404}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 487102}
@@ -374,7 +374,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 10000
-  field of view: 70
+  field of view: 80
   orthographic: 0
   orthographic size: 5
   m_Depth: 1
@@ -398,7 +398,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 112414}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -481,7 +481,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 133418}
   serializedVersion: 2
-  m_Mass: 82
+  m_Mass: 22
   m_Drag: 0.1
   m_AngularDrag: 0.1
   m_UseGravity: 0
@@ -1190,7 +1190,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 452124}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4364574695141904
 Transform:
@@ -1203,7 +1203,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 452124}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4613570406246172
 Transform:
@@ -1296,7 +1296,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1000013261131878}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1773,7 +1773,7 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.35
+  m_Radius: 0.4
   m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!136 &136000010095643678
 CapsuleCollider:

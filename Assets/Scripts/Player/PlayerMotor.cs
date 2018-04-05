@@ -120,6 +120,7 @@ public class PlayerMotor : MonoBehaviour {
         transform.rotation = tSpawnPoint.rotation;
     }
 
+
 	// Run every physics iteration
 	void FixedUpdate () {
         _courseStrength = Input.GetAxisRaw("Course");
@@ -337,8 +338,9 @@ public class PlayerMotor : MonoBehaviour {
         }*/
 
         float rayLength = 1.5f;
-        float standMultiplier = 5f;
+        float standMultiplier = 50f;
         float rayPenetration = 0f;
+        float rayOverExtension = .5f;
 
         Vector3 tPosition = transform.position + new Vector3(0.0f, 0.0f, 0.0f);
         if (Physics.Raycast(tPosition, Vector3.down, out _groundHit, rayLength)) {
@@ -349,29 +351,32 @@ public class PlayerMotor : MonoBehaviour {
             _lineRenderer.startColor = Color.green;
             _lineRenderer.endColor = Color.green;
             _lineRenderer.SetPosition(0, tPosition);
-            _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength));
+            _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength + rayOverExtension));
 
             rayPenetration = (rayLength - _groundHit.distance) / rayLength;
+            rayPenetration -= rayOverExtension;
+            if(rayPenetration < 0) { rayPenetration = 0; }
 
             // Stand Up!
             var tStandingForce = Vector3.up * rayPenetration * standMultiplier * standMultiplier; // 100 = Water Bob
+            _body.AddForce(tStandingForce, ForceMode.Force);
 
-           // var tStandingForce = Vector3.up * -Physics.gravity.y * (1 / Time.fixedDeltaTime) * 1.7f;
-           /*if(tStandingForce.y > 2)
-            {
-                _body.AddForce(tStandingForce, ForceMode.VelocityChange);
-            }*/
-           
+            // var tStandingForce = Vector3.up * -Physics.gravity.y * (1 / Time.fixedDeltaTime) * 1.7f;
+            /*if(tStandingForce.y > 2)
+             {
+                 _body.AddForce(tStandingForce, ForceMode.VelocityChange);
+             }*/
+
             Debug.Log("STANDING FORCE: " + tStandingForce.y + ", Pen: " + rayPenetration);
         } else {
             _isGrounded = false;
-            _rayGrounded = true;
+            _rayGrounded = false;
 
             Debug.DrawRay(tPosition, Vector3.down, Color.red);
             _lineRenderer.startColor = Color.red;
             _lineRenderer.endColor = Color.red;
             _lineRenderer.SetPosition(0, tPosition);
-            _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength));
+            _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength + rayOverExtension));
         }
 
         if(!_isGrounded && _rayGrounded)
@@ -485,7 +490,7 @@ public class PlayerMotor : MonoBehaviour {
             //_lean *= 5.0f;
 
             // *** NEW MOVEMENT
-            if (_isGrounded)
+           // if (_isGrounded)
             {
                 _lean.y = _body.velocity.y;
                 //_lean.x *= 5.0f;
@@ -652,7 +657,7 @@ public class PlayerMotor : MonoBehaviour {
         Vector3 tJumpForce = Vector3.up;
         //tJumpForce.x = _lean.x * .3f;// * .5f + _groundHit.normal.x;
         //tJumpForce.z = _lean.z;// * .5f + _groundHit.normal.z;
-        tJumpForce *= 850f; // 650f
+        tJumpForce *= 200f; // 650f
         _body.AddForce(tJumpForce, ForceMode.Impulse);
         CoolJump();
         //isGrounded = false;

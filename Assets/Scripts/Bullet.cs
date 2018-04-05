@@ -79,8 +79,9 @@ public class Bullet : MonoBehaviour
 
             if (tRigidbody != null)
             {
-                hitColliders[i].GetComponent<Rigidbody>().isKinematic = false;
-                hitColliders[i].GetComponent<Rigidbody>().AddExplosionForce(3000, center, 3000);
+                //hitColliders[i].GetComponent<Rigidbody>().isKinematic = false;
+                hitColliders[i].GetComponent<Rigidbody>().AddForce(Vector3.up * 100, ForceMode.Impulse);
+                hitColliders[i].GetComponent<Rigidbody>().AddExplosionForce(3000, center, 50);
             }
 
             //Debug.Log("Hit Collider: " + hitColliders[i].gameObject.name + " PlayerManager Null: " + (tPlayer == null));

@@ -13,7 +13,7 @@ public class PlayerCameraController : MonoBehaviour
 
     // Use this for initialization
     void Start () {
-        _cam.fieldOfView = _FOV_BASE;
+        //_cam.fieldOfView = _FOV_BASE;
     }
 	
 	// Update is called once per frame
