@@ -186,6 +186,7 @@ public class PlayerMotor : MonoBehaviour {
         {
             _doCatchFall = false;
             SetGrounded(false);
+            
         }
     }
 
@@ -296,7 +297,7 @@ public class PlayerMotor : MonoBehaviour {
         }*/
 
         float rayLength = 1.5f;
-        float standMultiplier = 50f;
+        float standMultiplier = 200f;
         float rayPenetration = 0f;
         float rayOverExtension = .5f;
 
@@ -316,7 +317,7 @@ public class PlayerMotor : MonoBehaviour {
             if(rayPenetration < 0) { rayPenetration = 0; }
 
             // Stand Up!
-            var tStandingForce = Vector3.up * rayPenetration * standMultiplier * standMultiplier; // 100 = Water Bob
+            var tStandingForce = Vector3.up * rayPenetration * standMultiplier; // 100 = Water Bob
             _body.AddForce(tStandingForce, ForceMode.Force);
 
             // var tStandingForce = Vector3.up * -Physics.gravity.y * (1 / Time.fixedDeltaTime) * 1.7f;
