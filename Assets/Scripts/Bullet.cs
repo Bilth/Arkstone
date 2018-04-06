@@ -80,11 +80,11 @@ public class Bullet : MonoBehaviour
             if (tRigidbody != null)
             {
                 // Dampen Control
-                var tDampener = hitColliders[i].GetComponent<ControlDampener>();
+                /*var tDampener = hitColliders[i].GetComponent<ControlDampener>();
                 if (tDampener != null)
                 {
                     tDampener.AddDampener(1.0f);
-                }
+                }*/
 
                 //hitColliders[i].GetComponent<Rigidbody>().isKinematic = false;
                 hitColliders[i].GetComponent<Rigidbody>().AddForce(Vector3.up * 100, ForceMode.Impulse);

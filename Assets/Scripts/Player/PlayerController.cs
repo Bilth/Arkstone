@@ -4,27 +4,17 @@ using UnityEngine.VR;
 
 [RequireComponent(typeof(PlayerMotor))]
 public class PlayerController : MonoBehaviour {
-
-    private float _RUSHING_MODIFIER = 3f;
-
+    
     [SerializeField]
     private bool _useMouse = false;
 
     private float _lookSensitivity = 10f; //6f
-    private float _thrusterForce = 30f; //700f
-    private float _cameraOffsetY = 0f;
-    private float _courseStrength = 0f;
-    private bool _rushing = false;
-    private float _jumpStrength = 0f;
-    private bool _jumpCharging = false;
 
 	private PlayerMotor _motor;
 
 	// Use this for initialization
 	void Start () {
 		_motor = GetComponent<PlayerMotor>();
-
-        //Time.timeScale = 2.0f;
     }
 
 	// Update is called once per frame
@@ -40,20 +30,10 @@ public class PlayerController : MonoBehaviour {
         Vector3 tMovX = transform.right * stickInput.x; 	// (X, 0, 0)
         Vector3 tMovY = transform.forward * stickInput.y;   // (0, 0, X)
         Vector3 tLean = (tMovX + tMovY); //.normalized
-
-        //Debug.Log("LEAN: " + tLean);
         tLean.y = 0;
 
         var tSpeed = 4.0f; // 4 Meters / Second
-
-        // Apply Lean
-        if(_motor.isGrounded)
-        {
-            tLean *= tSpeed;
-        } else
-        {
-            tLean *= tSpeed;
-        }
+        tLean *= tSpeed;
 
         var tDampener = GetComponent<ControlDampener>();
         if (tDampener != null)
@@ -63,7 +43,6 @@ public class PlayerController : MonoBehaviour {
                 tLean *= tDampener.Multiplier;
                 Debug.Log("DAMPENING: " + tDampener.Multiplier);
             }
-            
         }
 
         _motor.Lean(tLean);
@@ -85,14 +64,8 @@ public class PlayerController : MonoBehaviour {
                 cameraInput = cameraInput.normalized * ((cameraInput.magnitude - deadzone) / (1 - deadzone));
         }
 
-        //Debug.Log("Falling Force: " + _motor.fallingForce());
-        //cameraInput.y += _motor.fallingForce();
-
-        // Only do y axis because left/right mouse will affect camera, not player
-        //Vector3 tRot = new Vector3 (0f, cameraInput.y, 0f) * _lookSensitivity;
-
 		// Apply rotation
-		_motor.SetRotateY(cameraInput.y * _lookSensitivity); //tRot
+		_motor.SetRotateY(cameraInput.y * _lookSensitivity);
 
         // Calculate camera rotation as a 3D Vector (turning around)
         float tCameraRotationX = cameraInput.x * _lookSensitivity;
@@ -116,23 +89,5 @@ public class PlayerController : MonoBehaviour {
                 Valve.VR.OpenVR.System.ResetSeatedZeroPose();
             }
         }
-
-
-        /*if (Input.GetButtonDown("Jump"))
-        {
-            _jumpStrength = 0f;
-            _jumpCharging = true;
-        }
-
-        if(_jumpCharging)
-        {
-            _jumpStrength += Time.deltaTime;
-        }
-
-        // Jump
-        if (Input.GetButtonUp("Jump") && _motor.CanJump()) {
-            _jumpCharging = false;
-            _motor.Jump(Vector3.up * _thrusterForce, _jumpStrength);
-        }*/
     }
 }

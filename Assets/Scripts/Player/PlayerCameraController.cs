@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(Rigidbody))]
 public class PlayerCameraController : MonoBehaviour
 {
     private float _VELOCITY_MAX = 100f;

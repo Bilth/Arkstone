@@ -25,6 +25,6 @@ public class Hover : MonoBehaviour
 
         var force = Mathf.Max(0, Controller.Update(Distance, hit.distance));
         rb.AddForce(transform.up * force);
-        Debug.Log("Force: " + force + ", Hit Distance: " + hit.distance);
+        //Debug.Log("Force: " + force + ", Hit Distance: " + hit.distance);
     }
 }
