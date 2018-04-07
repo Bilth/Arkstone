@@ -10,7 +10,7 @@ public class PlayerMotor : MonoBehaviour {
     private float _GLIDE_CATCH_TIME_MAX = 2f;
     private float _TERMINAL_VELOCITY_HORIZONTAL = 3f;
     private float TIME_CHECK_GROUNDED = .2f;
-    private float TIME_AIRBORNE_MAX = .5f;
+    private float TIME_AIRBORNE_MAX = .3f;
     private float SPEED_BASE = 800f; //150f
     private float SPEED_BOOST = 100f; //150f
     private float GRAVITY = -9.81f;
@@ -44,6 +44,7 @@ public class PlayerMotor : MonoBehaviour {
     private Vector3 _velocityFinal;
 
     private bool _isGrounded = false;
+    private bool _canAirJump = false;
     private bool _doCatchFall = false;
     private float _courseStrength = 0f;
     private float _courseCharge = 0f;
@@ -185,12 +186,16 @@ public class PlayerMotor : MonoBehaviour {
         {
             _velocityFinal.x = _lean.x;
             _velocityFinal.z = _lean.z;
+            if(_velocityFinal.y <= 0)
+            {
+                _velocityFinal.y = Physics.gravity.y * Time.deltaTime;
+            }
 
             // Clear Y Velocity
-            if (_velocityFinal.y < 0) {
+            /*if (_velocityFinal.y < 0) {
                 SetGrounded(true);
                 _velocityFinal.y = 0;
-            }
+            }*/
         }
 
         if (_courseStrength > 0)
@@ -210,18 +215,70 @@ public class PlayerMotor : MonoBehaviour {
 
             // Discharge Energy
             //_body.AddForce(Camera.main.transform.forward * 200f * _courseCharge, ForceMode.Impulse);
+
+            // Leap!!
             Vector3 tDash = Camera.main.transform.forward * 10f;
-            tDash.y += 10f;
+            tDash.y += 15f;
             _velocityFinal = tDash;
             //_isGrounded = false;
 
             _courseCharge = 0;
         }
 
+        // Snap to ground
+        float snapDistance = 1.2f;
+        /*Vector3 tVelocitySnap = Vector3.zero;
+        if (!_controller.isGrounded && _velocityFinal.y <= 0)
+        {
+            RaycastHit hitInfo = new RaycastHit();
+            if (Physics.Raycast(new Ray(transform.position, Vector3.down), out hitInfo, snapDistance))
+            {
+                float tDiffY = hitInfo.point.y - transform.position.y;
+                if(tDiffY > 0) { tDiffY = 0; }
+                float tMoveY = (tDiffY * .2f);
+                Debug.Log("Move Y: " + tMoveY);
+                tVelocitySnap.y = tMoveY;
+
+                //_controller.Move(hitInfo.point - transform.position);
+                //if(_velocityFinal.y > hitInfo.point.y - transform.position.y)
+                //{
+                //_velocityFinal.y = (hitInfo.point.y - transform.position.y) / Time.deltaTime; // We're doing this since it has to be reversed below
+                //}
+                //_controller.Move(new Vector3(0, tMoveY, 0));
+                //hitInfo.point.y - transform.position.y
+            }
+
+        }*/
 
         _controller.Move(_velocityFinal * Time.deltaTime);
 
         _performRotation();
+
+        // Add downhill speedup
+
+        // More intelligent - Based on angle of ground?
+        // Snap to Ground
+        if (!_controller.isGrounded && _velocityFinal.y <= 0)
+        {
+            RaycastHit hitInfo = new RaycastHit();
+            if (Physics.Raycast(new Ray(transform.position, Vector3.down), out hitInfo, snapDistance))
+            {
+                /*float tDiffY = hitInfo.point.y - transform.position.y;
+                if (tDiffY > 0) { tDiffY = 0; }
+                float tMoveY = (tDiffY * .2f);
+                Debug.Log("Move Y: " + tMoveY);
+                tVelocitySnap.y = tMoveY;*/
+
+                _controller.Move(hitInfo.point - transform.position);
+                //if(_velocityFinal.y > hitInfo.point.y - transform.position.y)
+                //{
+                //_velocityFinal.y = (hitInfo.point.y - transform.position.y) / Time.deltaTime; // We're doing this since it has to be reversed below
+                //}
+                //_controller.Move(new Vector3(0, tMoveY, 0));
+                //hitInfo.point.y - transform.position.y
+            }
+
+        }
     }
 
     // Run every physics iteration
@@ -239,6 +296,25 @@ public class PlayerMotor : MonoBehaviour {
         _performMovement();
         _performRotation();*/
 	}
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        // Collision Friction
+        if (!_controller.isGrounded)
+        {
+            _velocityFinal.x -= _velocityFinal.x * Time.deltaTime * 5f;
+            _velocityFinal.z -= _velocityFinal.z * Time.deltaTime * 5f;
+            _velocityFinal.y -= _velocityFinal.y * Time.deltaTime * 5f;
+
+            Debug.Log("FRICTION! " + _velocityFinal.y + ", Delta: " + (_velocityFinal.y * Time.deltaTime * 5f));
+        }
+        else
+        {
+            _timeAirborne = 0;
+            _canAirJump = true;
+        }
+
+    }
 
     void OnTriggerEnter(Collider collider)
     {
@@ -603,18 +679,6 @@ public class PlayerMotor : MonoBehaviour {
 		}
 	}
 
-    void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        Debug.Log("Impact: " + _velocityFinal.magnitude);
-
-        if(!_controller.isGrounded)
-        {
-            _velocityFinal.x = 0;
-            _velocityFinal.z = 0;
-        }
-        
-    }
-
     public float fallingForce()
     {
         return 0;
@@ -622,13 +686,17 @@ public class PlayerMotor : MonoBehaviour {
 
     public void CoolJump()
     {
-        _cooldownJump = .75f;
+        _cooldownJump = .3f;
     }
 
     public void Jump()
     {
+        if(_timeAirborne > TIME_AIRBORNE_MAX && !_controller.isGrounded) { _canAirJump = false; }
+
         _velocityFinal.y = 10f;
         CoolJump();
+
+        Debug.Log("JUMP!");
     }
 
     public void JumpPhysics()
@@ -659,7 +727,7 @@ public class PlayerMotor : MonoBehaviour {
         //return true;
 
         Debug.Log("Can Jump? " + _timeAirborne + ", " + _controller.isGrounded + ", " + _cooldownJump);
-        return _cooldownJump < 0f && (_timeAirborne < TIME_AIRBORNE_MAX || _controller.isGrounded);
+        return _cooldownJump < 0f && (_timeAirborne < TIME_AIRBORNE_MAX || _controller.isGrounded || _canAirJump);
     }
     
     public Vector3 velocity
