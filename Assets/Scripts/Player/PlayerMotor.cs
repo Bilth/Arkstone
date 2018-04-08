@@ -100,8 +100,6 @@ public class PlayerMotor : MonoBehaviour {
         _isGrounded = pValue;
         if (_isGrounded)
         {
-            Debug.Log("GROUNDED!");
-
             //NullifyVelocityX();
            // NullifyVelocityZ();
 
@@ -211,7 +209,7 @@ public class PlayerMotor : MonoBehaviour {
                 tDampener.AddDampener(1f);
             }*/
 
-            Debug.Log("DISCHARGE: " + _courseCharge);
+            //Debug.Log("DISCHARGE: " + _courseCharge);
 
             // Discharge Energy
             //_body.AddForce(Camera.main.transform.forward * 200f * _courseCharge, ForceMode.Impulse);
@@ -225,49 +223,28 @@ public class PlayerMotor : MonoBehaviour {
             _courseCharge = 0;
         }
 
-        // Snap to ground
-        float snapDistance = .1f;
-        /*Vector3 tVelocitySnap = Vector3.zero;
-        if (!_controller.isGrounded && _velocityFinal.y <= 0)
-        {
-            RaycastHit hitInfo = new RaycastHit();
-            if (Physics.Raycast(new Ray(transform.position, Vector3.down), out hitInfo, snapDistance))
-            {
-                float tDiffY = hitInfo.point.y - transform.position.y;
-                if(tDiffY > 0) { tDiffY = 0; }
-                float tMoveY = (tDiffY * .2f);
-                Debug.Log("Move Y: " + tMoveY);
-                tVelocitySnap.y = tMoveY;
-
-                //_controller.Move(hitInfo.point - transform.position);
-                //if(_velocityFinal.y > hitInfo.point.y - transform.position.y)
-                //{
-                //_velocityFinal.y = (hitInfo.point.y - transform.position.y) / Time.deltaTime; // We're doing this since it has to be reversed below
-                //}
-                //_controller.Move(new Vector3(0, tMoveY, 0));
-                //hitInfo.point.y - transform.position.y
-            }
-
-        }*/
-
         _controller.Move(_velocityFinal * Time.deltaTime);
 
         _performRotation();
 
         // Add downhill speedup
-        
+
         // Intelligent Ground Snapping - Raycasts from last collision point instead of center point, since last collision is closer to the ground
         //      Allows for a much smaller snapping distance, reducing unwanted snapping during normal landings
-        if (!_controller.isGrounded && _velocityFinal.y <= 0)
+        float snapDistance = .1f;
+        if (!_controller.isGrounded && _velocityFinal.y < 0)
         {
             RaycastHit hitInfo = new RaycastHit();
             if (Physics.Raycast(new Ray(transform.TransformPoint(_lastCollisionLocal), Vector3.down), out hitInfo, snapDistance))
             {
                 Vector3 tDiff = hitInfo.point - transform.TransformPoint(_lastCollisionLocal);
+                Debug.Log("DIFF: " + tDiff);
                 _controller.Move(tDiff);
 
                 _timeAirborne = 0;
                 _canAirJump = true;
+
+                _lastCollisionLocal = Vector3.zero;
             }
 
         }
@@ -304,7 +281,14 @@ public class PlayerMotor : MonoBehaviour {
         {
             _velocityFinal.x -= _velocityFinal.x * Time.deltaTime * 5f;
             _velocityFinal.z -= _velocityFinal.z * Time.deltaTime * 5f;
-            _velocityFinal.y -= _velocityFinal.y * Time.deltaTime * 5f;
+            if(_velocityFinal.y < 0) // If falling, slow fall speed
+            {
+                _velocityFinal.y -= _velocityFinal.y * Time.deltaTime * 5f;
+            }
+
+            // Check Ceiling
+
+            
 
            // Debug.Log("FRICTION! " + _velocityFinal.y + ", Delta: " + (_velocityFinal.y * Time.deltaTime * 5f));
         }
@@ -328,8 +312,8 @@ public class PlayerMotor : MonoBehaviour {
             transform.parent = collider.gameObject.transform;
         }
 
-        _doCatchFall = true;
-        SetGrounded();
+        //_doCatchFall = true;
+        //SetGrounded();
     }
 
     void OnTriggerExit(Collider collider)
@@ -346,8 +330,8 @@ public class PlayerMotor : MonoBehaviour {
 
         if (_triggers.Count == 0)
         {
-            _doCatchFall = false;
-            SetGrounded(false);
+            //_doCatchFall = false;
+            //SetGrounded(false);
             
         }
     }
@@ -503,40 +487,7 @@ public class PlayerMotor : MonoBehaviour {
 
         // Perform movement based on velocity variable
         void _performMovement() {
-
-        if(!_isGrounded)  { _timeAirborne += Time.deltaTime; }
-        _cooldownJump -= Time.deltaTime;
-
-        // Gravity - Falling force
-        if(_doCatchFall)  {
-            if (_body.velocity.y < 0) { NullifyVelocityY(); }
-        } else {
-            _body.AddForce(Physics.gravity, ForceMode.Acceleration);
-        }
-
-        Vector3 tVelocity = _body.velocity;
-
-        // Glide - Coursing catches fall
-        if (_courseStrength > 0 && _body.velocity.y < 0)
-        {
-            // *** PID *** Gradual catch
-            float tMaxCourseFall = -1f; // 1m/s
-            if(_body.velocity.y < tMaxCourseFall)
-            {
-                
-                tVelocity.y = tMaxCourseFall;
-
-                _body.velocity = tVelocity;
-            }
-        }
-
-        // NIGHT IS 131C1C
-
-        // CALCULATE GROUND ANGLE
-        Vector3 tNormal = Vector3.up;
-
-        //float tDistToGround = _body.GetComponent<Collider>().bounds.size.y - _body.GetComponent<Collider>().bounds.center.y;
-
+        
         // Raycast to Floor
         Ray tRay = new Ray(transform.position, Vector3.down);
         /*if (Physics.Raycast(Vector3.zero, Vector3.down, 2f))
@@ -544,78 +495,6 @@ public class PlayerMotor : MonoBehaviour {
             tNormal = tHit.normal;
             Debug.DrawLine(Vector3.zero, Vector3.)
         }*/
-
-        float rayLength = .5f;
-        float standMultiplier = 200f;
-        float rayPenetration = 0f;
-        float rayOverExtension = .5f;
-
-        Vector3 tPosition = transform.position + new Vector3(0.0f, 0.0f, 0.0f);
-        if (Physics.Raycast(tPosition, Vector3.down, out _groundHit, rayLength)) {
-            _isGrounded = true;
-            _rayGrounded = true;
-
-           /* Debug.DrawRay(tPosition, Vector3.down, Color.green);
-            _lineRenderer.startColor = Color.green;
-            _lineRenderer.endColor = Color.green;
-            _lineRenderer.SetPosition(0, tPosition);
-            _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength + rayOverExtension));
-
-            rayPenetration = (rayLength - _groundHit.distance) / rayLength;
-            rayPenetration -= rayOverExtension;
-            if(rayPenetration < 0) { rayPenetration = 0; }
-
-            // Stand Up!
-            var tStandingForce = Vector3.up * rayPenetration * standMultiplier; // 100 = Water Bob
-            _body.AddForce(tStandingForce, ForceMode.Force);*/
-
-            // var tStandingForce = Vector3.up * -Physics.gravity.y * (1 / Time.fixedDeltaTime) * 1.7f;
-            /*if(tStandingForce.y > 2)
-             {
-                 _body.AddForce(tStandingForce, ForceMode.VelocityChange);
-             }*/
-
-            //Debug.Log("STANDING FORCE: " + tStandingForce.y + ", Pen: " + rayPenetration);
-        } else {
-            SetGrounded(false);
-            _rayGrounded = false;
-
-           /* Debug.DrawRay(tPosition, Vector3.down, Color.red);
-            _lineRenderer.startColor = Color.red;
-            _lineRenderer.endColor = Color.red;
-            _lineRenderer.SetPosition(0, tPosition);
-            _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength + rayOverExtension));*/
-        }
-
-        if(!_isGrounded && _rayGrounded)
-        {
-            SetGrounded(true);
-        }
-
-        //Ray tRay = new Ray(transform.position, Vector3.down); // Camera.main.ScreenPointToRay(Input.mousePosition);
-        //RaycastHit tHit;
-
-        //if (Physics.Raycast(transform.position, -Vector3.up, out _groundHit, 100.0f)) {
-        //Debug.DrawLine(tRay.origin, tHit.point);_groundHit
-
-        //}
-
-        //Debug.Log(tHit.normal);
-
-
-        /*function Start()
-            {
-                distToGround = collider.bounds.extents.y - collider.center.y;Debug.Log("Hit");
-            }
-
-            function Update()
-            {
-                // assume a range = distToGround + 0.2
-                if (Physics.Raycast(transform.position, -transform.up, hit, distToGround + 0.2))
-                {
-                    normal = hit.normal;
-                }
-            }*/
 
         /*
          * NIGHT 
@@ -630,34 +509,20 @@ public class PlayerMotor : MonoBehaviour {
         }*/
 
         // > Faster downhill
-        // > Smoother downhill
+        // + Smoother downhill
         // + No momentum
         // + Complete Control
         // + Full Air Control
         // + No Drag
         // + No Run button that needs to be constantly held
-        //_lean.y = _body.velocity.y;
+    }
 
-        //_body.MovePosition(transform.position + (_lean * Time.fixedDeltaTime));
-
-        //tVelocity = _body.velocity;
-        //tVelocity += _lean * Time.fixedDeltaTime;
-        //_body.velocity = tVelocity;
-
-        /*var tDampener = GetComponent<ControlDampener>();
-        if (tDampener != null)
-        {
-            if (tDampener.Multiplier != 1.0f)
-            {
-                // *** PID *** Allows for increasing control 
-            }
-            else
-            {
-                // *** PID *** Modify velocity instead of set 
-                _body.MovePosition(transform.position + (_lean * Time.fixedDeltaTime));
-            }
-        }*/
-
+    void updateLine(Color pColor, Vector3 tPosStart, Vector3 tPosEnd)
+    {
+        _lineRenderer.startColor = Color.red;
+        _lineRenderer.endColor = Color.red;
+        _lineRenderer.SetPosition(0, tPosStart);
+        _lineRenderer.SetPosition(1, tPosEnd);
     }
 
 	void _performRotation() {
