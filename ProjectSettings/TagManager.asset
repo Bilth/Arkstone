@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - Fire
   - Tree
+  - Platform
   layers:
   - Default
   - TransparentFX

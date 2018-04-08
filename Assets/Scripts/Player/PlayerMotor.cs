@@ -141,9 +141,15 @@ public class PlayerMotor : MonoBehaviour {
 
     void Update()
     {
+        // Check Rider
+        /*if(!_controller.isGrounded && transform.parent != null)
+        {
+            transform.parent = null;
+        }*/
+
         _courseStrength = Input.GetAxisRaw("Course");
 
-        float tVelocityY = GetComponent<Rigidbody>().velocity.y;
+        //float tVelocityY = GetComponent<Rigidbody>().velocity.y;
 
         _speed = SPEED_BASE;
         
@@ -259,6 +265,9 @@ public class PlayerMotor : MonoBehaviour {
             {
                 Vector3 tDiff = hitInfo.point - transform.TransformPoint(_lastCollisionLocal);
                 _controller.Move(tDiff);
+
+                _timeAirborne = 0;
+                _canAirJump = true;
             }
 
         }
@@ -284,8 +293,12 @@ public class PlayerMotor : MonoBehaviour {
     {
         _lastCollisionLocal = transform.InverseTransformPoint(hit.point);
 
-        Debug.Log("Local Collision: " + _lastCollisionLocal);
-
+        // Check Rider
+        /*if (hit.gameObject.tag == "Platform")
+        {
+            transform.parent = hit.gameObject.transform;
+        }*/
+        
         // Collision Friction
         if (!_controller.isGrounded)
         {
@@ -310,6 +323,11 @@ public class PlayerMotor : MonoBehaviour {
         string tName = collider.transform.name;
         _triggers.Add(tName);
 
+        if (collider.gameObject.tag == "Platform")
+        {
+            transform.parent = collider.gameObject.transform;
+        }
+
         _doCatchFall = true;
         SetGrounded();
     }
@@ -320,6 +338,11 @@ public class PlayerMotor : MonoBehaviour {
         
         string tName = collider.transform.name;
         _triggers.Remove(tName);
+
+        if (collider.gameObject.transform == transform.parent)
+        {
+            transform.parent = null;
+        }
 
         if (_triggers.Count == 0)
         {
@@ -335,7 +358,7 @@ public class PlayerMotor : MonoBehaviour {
 
         string tName = collision.collider.transform.name;
         int tColliderStart = _colliders.Count;
-        Debug.Log("Collision with " + tName);
+        //Debug.Log("Collision with " + tName);
 
         //_velocityFinal.x = 0;
         //_velocityFinal.z = 0;

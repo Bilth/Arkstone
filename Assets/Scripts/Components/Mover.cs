@@ -4,21 +4,11 @@ using System.Collections;
 public class Mover : MonoBehaviour
 {
 
-    public Vector3 startingVelocity = Vector3.zero;
-
-    private Rigidbody _body;
-
-    void Start()
-    {
-        _body = GetComponent<Rigidbody>();
-
-        Vector3 tVelocity = _body.velocity;
-        _body.velocity = startingVelocity;
-    }
+    public Vector3 velocity = Vector3.zero;
 
     void Update()
     {
-       // transform.Rotate(new Vector3(xPerSecond * Time.deltaTime, yPerSecond * Time.deltaTime, zPerSecond * Time.deltaTime));
+        transform.position = transform.position + velocity * Time.deltaTime;
     }
 }
 
