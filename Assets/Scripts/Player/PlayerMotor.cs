@@ -32,6 +32,7 @@ public class PlayerMotor : MonoBehaviour {
 
     private LineRenderer _lineRenderer;
     private bool _rayGrounded;
+    private Vector3 _lastCollisionLocal = Vector3.zero;
 
     private AudioSource _audioSource;
     public AudioClip land;
@@ -148,11 +149,10 @@ public class PlayerMotor : MonoBehaviour {
         
         _performCustomMovement();
         
-        if (!_controller.isGrounded)
+        if (!_controller.isGrounded) // Course-Corrected Air Movement
         {
             float tCorrectionSpeed = 10f;
-
-            // Allow Air Movement
+            
             if(_lean.x != 0)
             {
                 if(_lean.x > 0 && _velocityFinal.x < _lean.x)
@@ -182,7 +182,7 @@ public class PlayerMotor : MonoBehaviour {
 
             _velocityFinal.y += Physics.gravity.y * Time.deltaTime;
         }
-        else
+        else // Smooth Ground Movement
         {
             _velocityFinal.x = _lean.x;
             _velocityFinal.z = _lean.z;
@@ -190,12 +190,6 @@ public class PlayerMotor : MonoBehaviour {
             {
                 _velocityFinal.y = Physics.gravity.y * Time.deltaTime;
             }
-
-            // Clear Y Velocity
-            /*if (_velocityFinal.y < 0) {
-                SetGrounded(true);
-                _velocityFinal.y = 0;
-            }*/
         }
 
         if (_courseStrength > 0)
@@ -226,7 +220,7 @@ public class PlayerMotor : MonoBehaviour {
         }
 
         // Snap to ground
-        float snapDistance = 1.2f;
+        float snapDistance = .1f;
         /*Vector3 tVelocitySnap = Vector3.zero;
         if (!_controller.isGrounded && _velocityFinal.y <= 0)
         {
@@ -255,27 +249,16 @@ public class PlayerMotor : MonoBehaviour {
         _performRotation();
 
         // Add downhill speedup
-
-        // More intelligent - Based on angle of ground?
-        // Snap to Ground
+        
+        // Intelligent Ground Snapping - Raycasts from last collision point instead of center point, since last collision is closer to the ground
+        //      Allows for a much smaller snapping distance, reducing unwanted snapping during normal landings
         if (!_controller.isGrounded && _velocityFinal.y <= 0)
         {
             RaycastHit hitInfo = new RaycastHit();
-            if (Physics.Raycast(new Ray(transform.position, Vector3.down), out hitInfo, snapDistance))
+            if (Physics.Raycast(new Ray(transform.TransformPoint(_lastCollisionLocal), Vector3.down), out hitInfo, snapDistance))
             {
-                /*float tDiffY = hitInfo.point.y - transform.position.y;
-                if (tDiffY > 0) { tDiffY = 0; }
-                float tMoveY = (tDiffY * .2f);
-                Debug.Log("Move Y: " + tMoveY);
-                tVelocitySnap.y = tMoveY;*/
-
-                _controller.Move(hitInfo.point - transform.position);
-                //if(_velocityFinal.y > hitInfo.point.y - transform.position.y)
-                //{
-                //_velocityFinal.y = (hitInfo.point.y - transform.position.y) / Time.deltaTime; // We're doing this since it has to be reversed below
-                //}
-                //_controller.Move(new Vector3(0, tMoveY, 0));
-                //hitInfo.point.y - transform.position.y
+                Vector3 tDiff = hitInfo.point - transform.TransformPoint(_lastCollisionLocal);
+                _controller.Move(tDiff);
             }
 
         }
@@ -299,6 +282,10 @@ public class PlayerMotor : MonoBehaviour {
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        _lastCollisionLocal = transform.InverseTransformPoint(hit.point);
+
+        Debug.Log("Local Collision: " + _lastCollisionLocal);
+
         // Collision Friction
         if (!_controller.isGrounded)
         {
@@ -306,7 +293,7 @@ public class PlayerMotor : MonoBehaviour {
             _velocityFinal.z -= _velocityFinal.z * Time.deltaTime * 5f;
             _velocityFinal.y -= _velocityFinal.y * Time.deltaTime * 5f;
 
-            Debug.Log("FRICTION! " + _velocityFinal.y + ", Delta: " + (_velocityFinal.y * Time.deltaTime * 5f));
+           // Debug.Log("FRICTION! " + _velocityFinal.y + ", Delta: " + (_velocityFinal.y * Time.deltaTime * 5f));
         }
         else
         {
@@ -693,7 +680,7 @@ public class PlayerMotor : MonoBehaviour {
     {
         if(_timeAirborne > TIME_AIRBORNE_MAX && !_controller.isGrounded) { _canAirJump = false; }
 
-        _velocityFinal.y = 10f;
+        _velocityFinal.y = 9f;
         CoolJump();
 
         Debug.Log("JUMP!");
