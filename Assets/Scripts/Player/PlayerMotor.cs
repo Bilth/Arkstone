@@ -16,15 +16,15 @@ public class PlayerMotor : MonoBehaviour {
     private float GRAVITY = -9.81f;
     private bool _VR_TURNING = true;
 
-	[SerializeField]
-	public Camera _cam;
+    [SerializeField]
+    public Camera _cam;
 
     private Vector3 _lean = Vector3.zero;
-	private Vector3 _velocityPlanar = Vector3.zero;
+    private Vector3 _velocityPlanar = Vector3.zero;
     private Vector3 _momentum = Vector3.zero;
     private float _momentumMagnitude;
     private Vector3 _rotate = Vector3.zero;
-	private float _cameraRotationX = 0f; // X Rotation Only
+    private float _cameraRotationX = 0f; // X Rotation Only
     private float _cameraRotationXCurrent = 0f;
     private Vector3 _thrusterForce = Vector3.zero;
     private RaycastHit _groundHit;
@@ -62,8 +62,8 @@ public class PlayerMotor : MonoBehaviour {
     private List<string> _triggers;
 
     // Use this for initialization
-    void Start () {
-		_body = GetComponent<Rigidbody>();
+    void Start() {
+        _body = GetComponent<Rigidbody>();
         _controller = GetComponent<CharacterController>();
         _audioSource = GetComponent<AudioSource>();
         _velocityFinal = Vector3.zero;
@@ -72,7 +72,7 @@ public class PlayerMotor : MonoBehaviour {
         _triggers = new List<string>();
 
         DrawLine(transform.position, transform.position + new Vector3(0.0f, -0.5f, 0.0f), Color.red, 5);
-        
+
         _isGrounded = false;
         _speed = SPEED_BASE;
 
@@ -93,43 +93,20 @@ public class PlayerMotor : MonoBehaviour {
         _lineRenderer.sortingOrder = 1;
     }
 
-    public void SetGrounded(bool pValue = true)
-    {
-        if(_rayGrounded && pValue == false) { return; } // Ignore if raycast still grounded 
-
-        _isGrounded = pValue;
-        if (_isGrounded)
-        {
-            //NullifyVelocityX();
-           // NullifyVelocityZ();
-
-            _timeAirborne = 0f;
-            //_audioSource.time = .9f;
-            //_audioSource.PlayOneShot(land, .1f);
-
-            var tDampener = GetComponent<ControlDampener>();
-            if (tDampener != null)
-            {
-                tDampener.Clear();
-            }
-        }
-    }
-    
     public void Lean(Vector3 pLean) {
         _lean = pLean;
-	}
+    }
 
-	public void SetRotateY(float pY) {
-		_rotate.y = pY;
-	}
+    public void SetRotateY(float pY) {
+        _rotate.y = pY;
+    }
 
-	public void setCameraRotation(float pRotation) {
-		_cameraRotationX = pRotation;
-	}
+    public void setCameraRotation(float pRotation) {
+        _cameraRotationX = pRotation;
+    }
 
-    public void Teleport (float x, float y, float z)
+    public void Teleport(float x, float y, float z)
     {
-        NullifyVelocity();
         Jump();
 
         Transform tSpawnPoint = NetworkManager.singleton.GetStartPosition();
@@ -139,30 +116,20 @@ public class PlayerMotor : MonoBehaviour {
 
     void Update()
     {
-        // Check Rider
-        /*if(!_controller.isGrounded && transform.parent != null)
-        {
-            transform.parent = null;
-        }*/
-
         _courseStrength = Input.GetAxisRaw("Course");
 
-        //float tVelocityY = GetComponent<Rigidbody>().velocity.y;
+        PerformMovement();
 
-        _speed = SPEED_BASE;
-        
-        _performCustomMovement();
-        
         if (!_controller.isGrounded) // Course-Corrected Air Movement
         {
             float tCorrectionSpeed = 10f;
-            
-            if(_lean.x != 0)
+
+            if (_lean.x != 0)
             {
-                if(_lean.x > 0 && _velocityFinal.x < _lean.x)
+                if (_lean.x > 0 && _velocityFinal.x < _lean.x)
                 {
                     _velocityFinal.x += _lean.x * Time.deltaTime * tCorrectionSpeed;
-                    if(_velocityFinal.x > _lean.x) { _velocityFinal.x = _lean.x; }
+                    if (_velocityFinal.x > _lean.x) { _velocityFinal.x = _lean.x; }
                 } else if (_lean.x < 0 && _velocityFinal.x > _lean.x)
                 {
                     _velocityFinal.x += _lean.x * Time.deltaTime * tCorrectionSpeed;
@@ -190,7 +157,7 @@ public class PlayerMotor : MonoBehaviour {
         {
             _velocityFinal.x = _lean.x;
             _velocityFinal.z = _lean.z;
-            if(_velocityFinal.y <= 0)
+            if (_velocityFinal.y <= 0)
             {
                 _velocityFinal.y = Physics.gravity.y * Time.deltaTime;
             }
@@ -199,40 +166,26 @@ public class PlayerMotor : MonoBehaviour {
         if (_courseStrength > 0)
         {
             _courseCharge += Time.deltaTime;
-            // Debug.Log("CHARGE: " + _courseCharge);
-        }
-        else if (_courseCharge > 0)
+        } else if (_courseCharge > 0)
         {
-            /*var tDampener = GetComponent<ControlDampener>();
-            if (tDampener != null)
-            {
-                tDampener.AddDampener(1f);
-            }*/
-
-            //Debug.Log("DISCHARGE: " + _courseCharge);
-
-            // Discharge Energy
-            //_body.AddForce(Camera.main.transform.forward * 200f * _courseCharge, ForceMode.Impulse);
-
             // Leap!!
             Vector3 tDash = Camera.main.transform.forward * 10f;
             tDash.y += 15f;
             _velocityFinal = tDash;
-            //_isGrounded = false;
 
             _courseCharge = 0;
         }
 
         _controller.Move(_velocityFinal * Time.deltaTime);
 
-        _performRotation();
+        PerformRotation();
 
         // Add downhill speedup
 
         // Intelligent Ground Snapping - Raycasts from last collision point instead of center point, since last collision is closer to the ground
         //      Allows for a much smaller snapping distance, reducing unwanted snapping during normal landings
         float snapDistance = .1f;
-        if (!_controller.isGrounded && _velocityFinal.y < 0)
+        if (!_controller.isGrounded && _timerGliding == 0 && _velocityFinal.y < 0)
         {
             RaycastHit hitInfo = new RaycastHit();
             if (Physics.Raycast(new Ray(transform.TransformPoint(_lastCollisionLocal), Vector3.down), out hitInfo, snapDistance))
@@ -240,64 +193,122 @@ public class PlayerMotor : MonoBehaviour {
                 Vector3 tDiff = hitInfo.point - transform.TransformPoint(_lastCollisionLocal);
                 Debug.Log("DIFF: " + tDiff);
                 _controller.Move(tDiff);
+                
+                OnLand();
 
-                _timeAirborne = 0;
-                _canAirJump = true;
-
-                _lastCollisionLocal = Vector3.zero;
+                //_lastCollisionLocal = Vector3.zero;
             }
 
         }
     }
 
+    void PerformMovement()
+    {
+        // *** GO
+        // >>> Design first area flow, objectives, etc.
+        // Better in-air course correction
+
+        // *** WAIT
+
+        // EASY
+        // > Faster downhill
+        // > Ladder & Rope Climbing
+        // > Ceiling grab
+        // > Ceiling release
+        // > Course cancel
+        // > Energy
+        // > Impact
+        // > Health
+
+        // WAIT
+        // > Smooth Rider - Allows for smooth traversal on uneven ground
+        // > Disable Character Controller Step
+        // > Ducking
+        // > Window Hop
+
+        // DONE
+        // + Smoother downhill
+        // + No momentum
+        // + Complete Control
+        // + Full Air Control
+        // + No Drag
+        // + No Run button that needs to be constantly held
+
+        if (!_controller.isGrounded) { _timeAirborne += Time.deltaTime; }
+        _cooldownJump -= Time.deltaTime;
+
+        // Glide - Coursing catches fall
+        if (_courseStrength > 0)
+        {
+            _timerGliding += Time.deltaTime;
+            if (_timerGliding > _GLIDE_CATCH_TIME_MAX) { _timerGliding = _GLIDE_CATCH_TIME_MAX; }
+
+            if (_velocityFinal.y < 0)
+            {
+                float tMaxCourseFall = -1f; // 1m/s
+                _velocityFinal.y = Mathf.Lerp(_velocityFinal.y, tMaxCourseFall, _timerGliding / _GLIDE_CATCH_TIME_MAX);
+            }
+        }
+        else
+        {
+            _timerGliding = 0;
+        }
+    }
+
     // Run every physics iteration
-    void FixedUpdate () {
-       /* _courseStrength = Input.GetAxisRaw("Course");
+    void FixedUpdate() {
+        /* _courseStrength = Input.GetAxisRaw("Course");
 
-        float tVelocityY = GetComponent<Rigidbody>().velocity.y;
-        
-        _speed = SPEED_BASE;
+         float tVelocityY = GetComponent<Rigidbody>().velocity.y;
 
-        _lean.y = Physics.gravity.y;
+         _speed = SPEED_BASE;
 
-        _controller.Move(_lean * Time.fixedDeltaTime);
+         _lean.y = Physics.gravity.y;
 
-        _performMovement();
-        _performRotation();*/
-	}
+         _controller.Move(_lean * Time.fixedDeltaTime);
+
+         _performMovement();
+         _performRotation();*/
+    }
 
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
         _lastCollisionLocal = transform.InverseTransformPoint(hit.point);
 
-        // Check Rider
-        /*if (hit.gameObject.tag == "Platform")
+        // Relative Velocity
+        var tRigidbody = hit.gameObject.GetComponent<Rigidbody>();
+        if (tRigidbody != null)
         {
-            transform.parent = hit.gameObject.transform;
-        }*/
-        
+            //Vector3 tRelativeVelocity = tRigidbody.velocity
+        }
+
         // Collision Friction
         if (!_controller.isGrounded)
         {
             _velocityFinal.x -= _velocityFinal.x * Time.deltaTime * 5f;
             _velocityFinal.z -= _velocityFinal.z * Time.deltaTime * 5f;
-            if(_velocityFinal.y < 0) // If falling, slow fall speed
+            if (_velocityFinal.y < 0) // If falling, slow fall speed
             {
                 _velocityFinal.y -= _velocityFinal.y * Time.deltaTime * 5f;
             }
 
             // Check Ceiling
 
-            
 
-           // Debug.Log("FRICTION! " + _velocityFinal.y + ", Delta: " + (_velocityFinal.y * Time.deltaTime * 5f));
+
+            // Debug.Log("FRICTION! " + _velocityFinal.y + ", Delta: " + (_velocityFinal.y * Time.deltaTime * 5f));
         }
         else
         {
-            _timeAirborne = 0;
-            _canAirJump = true;
+            OnLand();
         }
 
+    }
+
+    void OnLand() {
+        _timeAirborne = 0;
+        _timerGliding = 0;
+        _canAirJump = true;
     }
 
     void OnTriggerEnter(Collider collider)
@@ -342,10 +353,7 @@ public class PlayerMotor : MonoBehaviour {
 
         string tName = collision.collider.transform.name;
         int tColliderStart = _colliders.Count;
-        //Debug.Log("Collision with " + tName);
 
-        //_velocityFinal.x = 0;
-        //_velocityFinal.z = 0;
         _colliders.Add(tName);
 
         // While Airborne
@@ -367,18 +375,6 @@ public class PlayerMotor : MonoBehaviour {
                 }*/
             }
         }
-
-        SetGrounded();
-
-        _timeAirborne = 0f;
-
-        /*if(!_isGrounded)
-        {
-            CalculateGrounded();
-        }*/
-        //ContactPoint contact = collision.contacts[0];
-
-        //Debug.Log("Collision: " + _body.velocity);
     }
 
     void OnCollisionExit(Collision collision)
@@ -388,136 +384,10 @@ public class PlayerMotor : MonoBehaviour {
         string tName = collision.collider.transform.name;
         _colliders.Remove(tName);
 
-        /*if(_colliders.Count == 0)
-        {
-            _isGrounded = false;
-        }*/
-
-        Debug.Log("Exit: " + tName + ", " + _colliders.Count);
-        
-
-        /*if (_isGrounded)
-        {
-            CalculateGrounded();
-        }*/
-        //ContactPoint contact = collision.contacts[0];
-
-        //Debug.Log("Collision: " + _body.velocity);
+        Debug.Log("Collision Exit: " + tName + ", " + _colliders.Count);
     }
 
-    void _performCustomMovement()
-    {
-        if (!_controller.isGrounded) { _timeAirborne += Time.deltaTime; }
-        _cooldownJump -= Time.deltaTime;
-
-        if (_doCatchFall)
-        {
-        }
-
-        // Glide - Coursing catches fall
-        if (_courseStrength > 0)
-        {
-            _timerGliding += Time.deltaTime;
-            if(_timerGliding > _GLIDE_CATCH_TIME_MAX) { _timerGliding = _GLIDE_CATCH_TIME_MAX; }
-
-            if(_velocityFinal.y < 0)
-            {
-                float tMaxCourseFall = -1f; // 1m/s
-                _velocityFinal.y = Mathf.Lerp(_velocityFinal.y, tMaxCourseFall, _timerGliding / _GLIDE_CATCH_TIME_MAX);
-            }
-        } else
-        {
-            _timerGliding = 0;
-        }
-
-        return;
-
-        // CHECK GROUNDED
-        float rayLength = 1f;
-        float standMultiplier = 200f;
-        float rayPenetration = 0f;
-        float rayOverExtension = .5f;
-
-        Vector3 tPosition = transform.position + new Vector3(0.0f, 0.0f, 0.0f);
-        if (Physics.Raycast(tPosition, Vector3.down, out _groundHit, rayLength))
-        {
-            _isGrounded = true;
-            _rayGrounded = true;
-
-            Debug.DrawRay(tPosition, Vector3.down, Color.green);
-            _lineRenderer.startColor = Color.green;
-            _lineRenderer.endColor = Color.green;
-            _lineRenderer.SetPosition(0, tPosition);
-            _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength + rayOverExtension));
-
-
-            rayPenetration = (rayLength - _groundHit.distance) / rayLength;
-            rayPenetration -= rayOverExtension;
-            if (rayPenetration < 0) { rayPenetration = 0; }
-
-            // Stand Up!
-            var tStandingForce = Vector3.up * rayPenetration * standMultiplier; // 100 = Water Bob
-            _body.AddForce(tStandingForce, ForceMode.Force);
-
-            // var tStandingForce = Vector3.up * -Physics.gravity.y * (1 / Time.fixedDeltaTime) * 1.7f;
-            /*if(tStandingForce.y > 2)
-             {
-                 _body.AddForce(tStandingForce, ForceMode.VelocityChange);
-             }*/
-
-            //Debug.Log("STANDING FORCE: " + tStandingForce.y + ", Pen: " + rayPenetration);
-        }
-        else
-        {
-            SetGrounded(false);
-            _rayGrounded = false;
-
-            Debug.DrawRay(tPosition, Vector3.down, Color.red);
-            _lineRenderer.startColor = Color.red;
-            _lineRenderer.endColor = Color.red;
-            _lineRenderer.SetPosition(0, tPosition);
-            _lineRenderer.SetPosition(1, tPosition + new Vector3(0, -rayLength + rayOverExtension));
-        }
-
-        if (!_isGrounded && _rayGrounded)
-        {
-            SetGrounded(true);
-        }
-    }
-
-        // Perform movement based on velocity variable
-        void _performMovement() {
-        
-        // Raycast to Floor
-        Ray tRay = new Ray(transform.position, Vector3.down);
-        /*if (Physics.Raycast(Vector3.zero, Vector3.down, 2f))
-        {
-            tNormal = tHit.normal;
-            Debug.DrawLine(Vector3.zero, Vector3.)
-        }*/
-
-        /*
-         * NIGHT 
-         * Light 000810FF 1.14 */
-
-        // *** GROUND SLOPE ***
-        /*if (_isGrounded)
-        {
-            _lean.x += tHit.normal.x;
-            _lean.z += tHit.normal.z;
-
-        }*/
-
-        // > Faster downhill
-        // + Smoother downhill
-        // + No momentum
-        // + Complete Control
-        // + Full Air Control
-        // + No Drag
-        // + No Run button that needs to be constantly held
-    }
-
-    void updateLine(Color pColor, Vector3 tPosStart, Vector3 tPosEnd)
+    void UpdateLine(Color pColor, Vector3 tPosStart, Vector3 tPosEnd)
     {
         _lineRenderer.startColor = Color.red;
         _lineRenderer.endColor = Color.red;
@@ -525,7 +395,7 @@ public class PlayerMotor : MonoBehaviour {
         _lineRenderer.SetPosition(1, tPosEnd);
     }
 
-	void _performRotation() {
+	void PerformRotation() {
 
         // VR Chunked Rotation
         if(UnityEngine.XR.XRSettings.enabled)
@@ -541,9 +411,7 @@ public class PlayerMotor : MonoBehaviour {
         }
 
         _controller.transform.Rotate(_rotate);
-        //_controller.MoveRotation (_body.rotation * Quaternion.Euler(_rotate));
 		if (_cam != null) {
-
             // Set our rotation and clamp it
             _cameraRotationXCurrent -= _cameraRotationX;
             _cameraRotationXCurrent = Mathf.Clamp(_cameraRotationXCurrent, - _cameraRotationLimit, _cameraRotationLimit);
