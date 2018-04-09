@@ -191,12 +191,13 @@ public class PlayerMotor : MonoBehaviour {
             if (Physics.Raycast(new Ray(transform.TransformPoint(_lastCollisionLocal), Vector3.down), out hitInfo, snapDistance))
             {
                 Vector3 tDiff = hitInfo.point - transform.TransformPoint(_lastCollisionLocal);
-                Debug.Log("DIFF: " + tDiff);
-                _controller.Move(tDiff);
-                
-                OnLand();
+                if(tDiff.magnitude > 0f)
+                {
+                    //Debug.Log("DIFF: " + tDiff + "Magnitude: " + tDiff.magnitude);
+                    _controller.Move(tDiff);
 
-                //_lastCollisionLocal = Vector3.zero;
+                    OnLand();
+                }
             }
 
         }
@@ -323,6 +324,12 @@ public class PlayerMotor : MonoBehaviour {
             transform.parent = collider.gameObject.transform;
         }
 
+        if (collider.gameObject.tag == "River")
+        {
+            Debug.Log("IN RIVER!!");
+            //transform.parent = collider.gameObject.transform;
+        }
+
         //_doCatchFall = true;
         //SetGrounded();
     }
@@ -337,6 +344,12 @@ public class PlayerMotor : MonoBehaviour {
         if (collider.gameObject.transform == transform.parent)
         {
             transform.parent = null;
+        }
+
+        if (collider.gameObject.tag == "River")
+        {
+            Debug.Log("OUT RIVER!!");
+            //transform.parent = collider.gameObject.transform;
         }
 
         if (_triggers.Count == 0)
@@ -438,8 +451,6 @@ public class PlayerMotor : MonoBehaviour {
 
         _velocityFinal.y = 9f;
         CoolJump();
-
-        Debug.Log("JUMP!");
     }
 
     public void JumpPhysics()
@@ -461,15 +472,7 @@ public class PlayerMotor : MonoBehaviour {
 
     public bool CanJump()
     {
-
-        //return (_isGrounded || _timeAirborne < .2f) && _cooldownJump < 0f;
-        // Check if player just landed and automated check hasn't updated
-        //CalculateGrounded();
-        //return Physics.Raycast(_body.GetComponent<Transform>().position, new Vector3(0, -1, 0), _distToGround + .2f);
-
-        //return true;
-
-        Debug.Log("Can Jump? " + _timeAirborne + ", " + _controller.isGrounded + ", " + _cooldownJump);
+        //Debug.Log("Can Jump? " + _timeAirborne + ", " + _controller.isGrounded + ", " + _cooldownJump);
         return _cooldownJump < 0f && (_timeAirborne < TIME_AIRBORNE_MAX || _controller.isGrounded || _canAirJump);
     }
     

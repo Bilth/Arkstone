@@ -48,7 +48,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _Foam:
         m_Texture: {fileID: 2800000, guid: 5d15a98fc0e7b4b4cb50bf0fd6279ee3, type: 3}
-        m_Scale: {x: 5, y: 5}
+        m_Scale: {x: 4, y: 4}
         m_Offset: {x: 0, y: 0}
     - _Noise:
         m_Texture: {fileID: 2800000, guid: 43cd82d77572cc74188065122245d3bd, type: 3}
@@ -96,7 +96,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _WaterNormal:
         m_Texture: {fileID: 2800000, guid: 53b00ac4b7ee2fb4681d46ce396bde98, type: 3}
-        m_Scale: {x: 3, y: 3}
+        m_Scale: {x: 4, y: 4}
         m_Offset: {x: 0, y: 0}
     - _WaterNormal1:
         m_Texture: {fileID: 2800000, guid: 53b00ac4b7ee2fb4681d46ce396bde98, type: 3}
@@ -131,12 +131,12 @@ Material:
     - _BigCascadeAngle: 7
     - _BigCascadeAngleFalloff: 4
     - _BigCascadeFalloff: 80
-    - _BigCascadeFoamFalloff: 1.26
-    - _BigCascadeNoisePower: 6.25
+    - _BigCascadeFoamFalloff: 0.98
+    - _BigCascadeNoisePower: 2.89
     - _BigCascadeNormalInfluence: 0
-    - _BigCascadeNormalScale: 1
+    - _BigCascadeNormalScale: 1.17
     - _BigCascadeSmoothness: 0
-    - _BigCascadeSpecular: 0.816
+    - _BigCascadeSpecular: 0
     - _BigCascadeSpeed: 4
     - _BigCascadeTransparency: 0.002
     - _BigCascadeWaterNormalScale: 0.9
@@ -193,12 +193,12 @@ Material:
     - _SmallCascadeAngle: 2
     - _SmallCascadeAngleFalloff: 1
     - _SmallCascadeFalloff: 80
-    - _SmallCascadeFoamFalloff: 3.24
-    - _SmallCascadeNoisePower: 6.25
+    - _SmallCascadeFoamFalloff: 0.09
+    - _SmallCascadeNoisePower: 2.51
     - _SmallCascadeNormalInfluence: 20
     - _SmallCascadeNormalScale: 1
     - _SmallCascadeSmoothness: 0
-    - _SmallCascadeSpecular: 0.8
+    - _SmallCascadeSpecular: 0.591
     - _SmallCascadeSpeed: 4
     - _SmallCascadeWaterNormalScale: 0.69
     - _SmallCascadeWaterTessScale: 0.04
@@ -238,7 +238,7 @@ Material:
     - _CascadeColor: {r: 20, g: 20, b: 20, a: 0}
     - _Color0: {r: 0, g: 0.6749488, b: 0.8088235, a: 0}
     - _Color1: {r: 0, g: 0.048731543, b: 0.22794023, a: 0}
-    - _DeepColor: {r: 0.05708845, g: 0.095184885, b: 0.23528743, a: 0}
+    - _DeepColor: {r: 0.2030172, g: 0.45181286, b: 0.5413792, a: 0}
     - _FoamColor: {r: 8, g: 8, b: 8, a: 0}
     - _FoamSpeed: {r: 0.3, g: 0.3, b: 0, a: 0}
     - _NoiseSpeed: {r: -0.02, g: -0.02, b: 0, a: 0}

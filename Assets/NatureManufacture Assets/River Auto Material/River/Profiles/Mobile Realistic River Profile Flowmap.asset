@@ -34,8 +34,8 @@ MonoBehaviour:
   maxVal: 0.5
   vertsInShape: 9
   traingleDensity: 0.125
-  uvScale: 5
-  uvRotation: 0
+  uvScale: 1
+  uvRotation: 1
   flowFlat:
     serializedVersion: 2
     m_Curve:
