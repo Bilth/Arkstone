@@ -191,7 +191,7 @@ Material:
     - _SlowCascadeSpeed: 0.15
     - _SlowWaterSpeed: 0.5
     - _SmallCascadeAngle: 2
-    - _SmallCascadeAngleFalloff: 1
+    - _SmallCascadeAngleFalloff: 5.8
     - _SmallCascadeFalloff: 80
     - _SmallCascadeFoamFalloff: 0.09
     - _SmallCascadeNoisePower: 2.51

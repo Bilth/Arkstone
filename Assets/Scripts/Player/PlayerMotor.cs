@@ -27,6 +27,8 @@ public class PlayerMotor : MonoBehaviour {
     private float _cameraRotationX = 0f; // X Rotation Only
     private float _cameraRotationXCurrent = 0f;
     private Vector3 _thrusterForce = Vector3.zero;
+    private Vector3 _riverForce = Vector3.zero;
+    private int _riverCount = 0;
     private RaycastHit _groundHit;
     private float _distToGround = 0f;
 
@@ -67,6 +69,7 @@ public class PlayerMotor : MonoBehaviour {
         _controller = GetComponent<CharacterController>();
         _audioSource = GetComponent<AudioSource>();
         _velocityFinal = Vector3.zero;
+        _riverForce = Vector3.zero;
 
         _colliders = new List<string>();
         _triggers = new List<string>();
@@ -176,7 +179,27 @@ public class PlayerMotor : MonoBehaviour {
             _courseCharge = 0;
         }
 
-        _controller.Move(_velocityFinal * Time.deltaTime);
+        // River Force
+        if(_riverCount > 0)
+        {
+           // Debug.Log("RIVER CHECK...");
+            RaycastHit hitInfo = new RaycastHit();
+            float tCheckDistance = 3f;
+            if (Physics.Raycast(new Ray(transform.position + (Vector3.up * tCheckDistance), Vector3.down), out hitInfo, tCheckDistance, LayerMask.GetMask("River")))
+            {
+                _riverForce.x = hitInfo.normal.x;
+                _riverForce.z = hitInfo.normal.z;
+                _riverForce.y = 1 - hitInfo.normal.y;
+                _riverForce.Normalize();
+                _riverForce *= 3f;
+                //Debug.Log("RIVER FORCE: " + _riverForce);
+            }
+        } else
+        {
+            _riverForce = Vector3.zero;
+        }
+
+        _controller.Move((_velocityFinal + _riverForce) * Time.deltaTime);
 
         PerformRotation();
 
@@ -326,6 +349,7 @@ public class PlayerMotor : MonoBehaviour {
 
         if (collider.gameObject.tag == "River")
         {
+            _riverCount++;
             Debug.Log("IN RIVER!!");
             //transform.parent = collider.gameObject.transform;
         }
@@ -348,6 +372,7 @@ public class PlayerMotor : MonoBehaviour {
 
         if (collider.gameObject.tag == "River")
         {
+            _riverCount--;
             Debug.Log("OUT RIVER!!");
             //transform.parent = collider.gameObject.transform;
         }
