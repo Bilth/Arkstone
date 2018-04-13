@@ -9,6 +9,7 @@ public class PlayerMotor : MonoBehaviour {
 
     private float _GLIDE_CATCH_TIME_MAX = 2f;
     private float _TERMINAL_VELOCITY_HORIZONTAL = 3f;
+    private float _WATER_CHECK_OFFSET = 6f;
     private float TIME_CHECK_GROUNDED = .2f;
     private float TIME_AIRBORNE_MAX = .3f;
     private float SPEED_BASE = 800f; //150f
@@ -73,8 +74,8 @@ public class PlayerMotor : MonoBehaviour {
 
         _colliders = new List<string>();
         _triggers = new List<string>();
-
-        DrawLine(transform.position, transform.position + new Vector3(0.0f, -0.5f, 0.0f), Color.red, 5);
+        
+        //DrawLine(transform.position + (Vector3.up * _WATER_CHECK_OFFSET), transform.position, Color.blue);
 
         _isGrounded = false;
         _speed = SPEED_BASE;
@@ -180,22 +181,29 @@ public class PlayerMotor : MonoBehaviour {
         }
 
         // River Force
-        if(_riverCount > 0)
+        if (_riverCount > 0)
         {
            // Debug.Log("RIVER CHECK...");
             RaycastHit hitInfo = new RaycastHit();
-            float tCheckDistance = 3f;
-            if (Physics.Raycast(new Ray(transform.position + (Vector3.up * tCheckDistance), Vector3.down), out hitInfo, tCheckDistance, LayerMask.GetMask("River")))
+            if (Physics.Raycast(new Ray(transform.position + (Vector3.up * _WATER_CHECK_OFFSET), Vector3.down), out hitInfo, _WATER_CHECK_OFFSET, LayerMask.GetMask("River")))
             {
+                //UpdateLine(_riverCount > 0 ? Color.blue : Color.red, Color.green, transform.position + (Vector3.up * _WATER_CHECK_OFFSET), transform.position);
+
                 _riverForce.x = hitInfo.normal.x;
                 _riverForce.z = hitInfo.normal.z;
-                _riverForce.y = 1 - hitInfo.normal.y;
+                _riverForce.y = 0f; // 1 - hitInfo.normal.y;
                 _riverForce.Normalize();
-                _riverForce *= 3f;
+                _riverForce *= 6f;
+                _riverForce.y = 0f;
                 //Debug.Log("RIVER FORCE: " + _riverForce);
+            } else
+            {
+                //UpdateLine(_riverCount > 0 ? Color.blue : Color.red, Color.yellow, transform.position + (Vector3.up * _WATER_CHECK_OFFSET), transform.position);
+                
             }
-        } else
+        } else if(_controller.isGrounded)
         {
+            //UpdateLine(_riverCount > 0 ? Color.blue : Color.red, Color.red, transform.position + (Vector3.up * _WATER_CHECK_OFFSET), transform.position);
             _riverForce = Vector3.zero;
         }
 
@@ -350,7 +358,7 @@ public class PlayerMotor : MonoBehaviour {
         if (collider.gameObject.tag == "River")
         {
             _riverCount++;
-            Debug.Log("IN RIVER!!");
+            //Debug.Log("INTO RIVER: " + _riverCount);
             //transform.parent = collider.gameObject.transform;
         }
 
@@ -373,7 +381,7 @@ public class PlayerMotor : MonoBehaviour {
         if (collider.gameObject.tag == "River")
         {
             _riverCount--;
-            Debug.Log("OUT RIVER!!");
+            //Debug.Log("OUT RIVER: " + _riverCount);
             //transform.parent = collider.gameObject.transform;
         }
 
@@ -425,10 +433,10 @@ public class PlayerMotor : MonoBehaviour {
         Debug.Log("Collision Exit: " + tName + ", " + _colliders.Count);
     }
 
-    void UpdateLine(Color pColor, Vector3 tPosStart, Vector3 tPosEnd)
+    void UpdateLine(Color pColorStart, Color pColorEnd, Vector3 tPosStart, Vector3 tPosEnd)
     {
-        _lineRenderer.startColor = Color.red;
-        _lineRenderer.endColor = Color.red;
+        _lineRenderer.startColor = pColorStart;
+        _lineRenderer.endColor = pColorEnd;
         _lineRenderer.SetPosition(0, tPosStart);
         _lineRenderer.SetPosition(1, tPosEnd);
     }
@@ -472,7 +480,10 @@ public class PlayerMotor : MonoBehaviour {
 
     public void Jump()
     {
-        if(_timeAirborne > TIME_AIRBORNE_MAX && !_controller.isGrounded) { _canAirJump = false; }
+        if(_timeAirborne > TIME_AIRBORNE_MAX && !_controller.isGrounded) {
+            _canAirJump = false;
+            //if(_riverCount == 0) { _riverForce = Vector3.zero; }
+        }
 
         _velocityFinal.y = 9f;
         CoolJump();
