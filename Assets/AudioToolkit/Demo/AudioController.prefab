@@ -693,7 +693,7 @@ MonoBehaviour:
         RandomStartPosition: 0
         individualSettings: []
     - Name: Rapids
-      Loop: 1
+      Loop: 0
       loopSequenceCount: 0
       loopSequenceOverlap: 0
       loopSequenceRandomDelay: 0

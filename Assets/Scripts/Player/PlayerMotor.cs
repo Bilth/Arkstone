@@ -29,6 +29,7 @@ public class PlayerMotor : MonoBehaviour {
     private float _cameraRotationXCurrent = 0f;
     private Vector3 _thrusterForce = Vector3.zero;
     private Vector3 _riverForce = Vector3.zero;
+    private Vector3 _glideLast = Vector3.zero;
     private int _riverCount = 0;
     private RaycastHit _groundHit;
     private float _distToGround = 0f;
@@ -126,33 +127,40 @@ public class PlayerMotor : MonoBehaviour {
 
         if (!_controller.isGrounded) // Course-Corrected Air Movement
         {
-            float tCorrectionSpeed = 10f;
+            float tCorrectionSpeed = 2f;
+            float tAirLeanMax = 4f;
+            float tDampenMultiplier = .5f;
+            Vector3 tVelFlat = Vector3.zero;
+            tVelFlat.x = _velocityFinal.x;
+            tVelFlat.z = _velocityFinal.z;
+            bool tBelowMax = Mathf.Floor(tVelFlat.magnitude * 10f) / 10f <= tAirLeanMax;
+            float tVelFlatLast = tVelFlat.magnitude;
 
-            if (_lean.x != 0)
+            _velocityFinal.x += _lean.x * Time.deltaTime * tCorrectionSpeed;
+            _velocityFinal.z += _lean.z * Time.deltaTime * tCorrectionSpeed;
+
+            // Never speed up while airborn, beyond normal lean
+            tVelFlat.x = _velocityFinal.x;
+            tVelFlat.z = _velocityFinal.z;
+            if (tVelFlatLast > tAirLeanMax && tVelFlat.magnitude > tVelFlatLast)
             {
-                if (_lean.x > 0 && _velocityFinal.x < _lean.x)
-                {
-                    _velocityFinal.x += _lean.x * Time.deltaTime * tCorrectionSpeed;
-                    if (_velocityFinal.x > _lean.x) { _velocityFinal.x = _lean.x; }
-                } else if (_lean.x < 0 && _velocityFinal.x > _lean.x)
-                {
-                    _velocityFinal.x += _lean.x * Time.deltaTime * tCorrectionSpeed;
-                    if (_velocityFinal.x < _lean.x) { _velocityFinal.x = _lean.x; }
-                }
+                tVelFlat = tVelFlat.normalized * tVelFlatLast;
+                _velocityFinal.x = tVelFlat.x;
+                _velocityFinal.z = tVelFlat.z;
             }
+            
+            // Dampen momentum over time
+            _velocityFinal.x += Time.deltaTime * tDampenMultiplier * (_velocityFinal.x > 0 ? -1 : 1);
+            _velocityFinal.z += Time.deltaTime * tDampenMultiplier * (_velocityFinal.z > 0 ? -1 : 1);
 
-            if (_lean.z != 0)
+            // Fine course correction
+            tVelFlat.x = _velocityFinal.x;
+            tVelFlat.z = _velocityFinal.z;
+            if (tBelowMax && tVelFlat.magnitude > tAirLeanMax)
             {
-                if (_lean.z > 0 && _velocityFinal.z < _lean.z)
-                {
-                    _velocityFinal.z += _lean.z * Time.deltaTime * tCorrectionSpeed;
-                    if (_velocityFinal.z > _lean.z) { _velocityFinal.z = _lean.z; }
-                }
-                else if (_lean.z < 0 && _velocityFinal.z > _lean.z)
-                {
-                    _velocityFinal.z += _lean.z * Time.deltaTime * tCorrectionSpeed;
-                    if (_velocityFinal.z < _lean.z) { _velocityFinal.z = _lean.z; }
-                }
+                tVelFlat = tVelFlat.normalized * tAirLeanMax;
+                _velocityFinal.x = tVelFlat.x;
+                _velocityFinal.z = tVelFlat.z;
             }
 
             _velocityFinal.y += Physics.gravity.y * Time.deltaTime;
@@ -163,7 +171,7 @@ public class PlayerMotor : MonoBehaviour {
             _velocityFinal.z = _lean.z;
             if (_velocityFinal.y <= 0)
             {
-                _velocityFinal.y = Physics.gravity.y * Time.deltaTime;
+                _velocityFinal.y = Physics.gravity.y * Time.deltaTime; // Keep gravity pushing us downward
             }
         }
 
@@ -173,9 +181,12 @@ public class PlayerMotor : MonoBehaviour {
         } else if (_courseCharge > 0)
         {
             // Leap!!
-            Vector3 tDash = Camera.main.transform.forward * 10f;
+            /*Vector3 tDash = Camera.main.transform.forward * 10f;
             tDash.y += 15f;
             _velocityFinal = tDash;
+            _riverForce = Vector3.zero;*/
+
+            //Leap();
 
             _courseCharge = 0;
         }
@@ -193,7 +204,7 @@ public class PlayerMotor : MonoBehaviour {
                 _riverForce.z = hitInfo.normal.z;
                 _riverForce.y = 0f; // 1 - hitInfo.normal.y;
                 _riverForce.Normalize();
-                _riverForce *= 6f;
+                _riverForce *= 2f; // Max 6f
                 _riverForce.y = 0f;
                 //Debug.Log("RIVER FORCE: " + _riverForce);
             } else
@@ -234,11 +245,24 @@ public class PlayerMotor : MonoBehaviour {
         }
     }
 
+    void Leap() {
+        Vector3 tDash = Camera.main.transform.forward * 20f; //10f
+        tDash.y += 15f;
+        _velocityFinal = tDash;
+        _riverForce = Vector3.zero;
+    }
+
     void PerformMovement()
     {
         // *** GO
         // >>> Design first area flow, objectives, etc.
         // Better in-air course correction
+
+        // Leap with 10s cooldown 
+        // or
+        // Leap with energy cost
+        // or
+        // Just glide 
 
         // *** WAIT
 
@@ -357,6 +381,15 @@ public class PlayerMotor : MonoBehaviour {
 
         if (collider.gameObject.tag == "River")
         {
+            float tRelativeVelocity = Vector3.Magnitude(collider.transform.parent.GetComponent<Rigidbody>().velocity - _velocityFinal);
+            Debug.Log("IMPACT VELOCITY: " + tRelativeVelocity);
+
+            if (_riverCount == 0 && tRelativeVelocity > 10f)
+            {
+                Debug.Log("SPLASH!");
+                //collider.
+            }
+
             _riverCount++;
             //Debug.Log("INTO RIVER: " + _riverCount);
             //transform.parent = collider.gameObject.transform;

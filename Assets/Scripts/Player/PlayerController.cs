@@ -25,25 +25,17 @@ public class PlayerController : MonoBehaviour {
             stickInput = Vector2.zero;
         else
             stickInput = stickInput.normalized * ((stickInput.magnitude - deadzone) / (1 - deadzone));
+
+        Debug.Log("Stick Input: " + stickInput.x + ", " + stickInput.y);
         
         // Player Lean
         Vector3 tMovX = transform.right * stickInput.x; 	// (X, 0, 0)
         Vector3 tMovY = transform.forward * stickInput.y;   // (0, 0, X)
-        Vector3 tLean = (tMovX + tMovY); //.normalized
+        Vector3 tLean = (tMovX + tMovY).normalized; // Direction
         tLean.y = 0;
 
-        var tSpeed = 4.0f; // 4 Meters / Second
+        var tSpeed = stickInput.magnitude * 4f; // Magnitude
         tLean *= tSpeed;
-
-        var tDampener = GetComponent<ControlDampener>();
-        if (tDampener != null)
-        {
-            if(tDampener.Multiplier != 1.0f)
-            {
-                tLean *= tDampener.Multiplier;
-                Debug.Log("DAMPENING: " + tDampener.Multiplier);
-            }
-        }
 
         _motor.Lean(tLean);
 
