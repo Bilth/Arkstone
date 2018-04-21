@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour {
         else
             stickInput = stickInput.normalized * ((stickInput.magnitude - deadzone) / (1 - deadzone));
 
-        Debug.Log("Stick Input: " + stickInput.x + ", " + stickInput.y);
+        //Debug.Log("Stick Input: " + stickInput.x + ", " + stickInput.y);
         
         // Player Lean
         Vector3 tMovX = transform.right * stickInput.x; 	// (X, 0, 0)
@@ -57,17 +57,30 @@ public class PlayerController : MonoBehaviour {
         }
 
 		// Apply rotation
-		_motor.SetRotateY(cameraInput.y * _lookSensitivity);
+		_motor.SetRotateY(cameraInput.y * _lookSensitivity * Time.deltaTime * 90f);
 
         // Calculate camera rotation as a 3D Vector (turning around)
         float tCameraRotationX = cameraInput.x * _lookSensitivity;
 		_motor.setCameraRotation (tCameraRotationX);
 
-        if (Input.GetButtonDown("Jump") && _motor.CanJump())  {
-            _motor.Jump();
+        // 
+        if (Input.GetButtonDown("Jump"))  {
+            if(_motor.CanJump())
+            {
+                _motor.Jump();
+            } else
+            {
+                _motor.SetGliding();
+            }
         }
 
-        if(Input.GetButtonDown("Recall"))
+        // LB
+        if (Input.GetButtonDown("Leap"))
+        {
+            _motor.Leap();
+        }
+
+            if (Input.GetButtonDown("Recall"))
         {
             Debug.Log("RECALL!");
 
