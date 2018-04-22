@@ -31,7 +31,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 1
   m_IsActive: 1
 --- !u!4 &429450
 Transform:
@@ -39,14 +39,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 153850}
-  m_LocalRotation: {x: 0.27204606, y: -0.3242506, z: 0.2904757, w: 0.8581821}
-  m_LocalPosition: {x: 31.862385, y: -18.351782, z: 109.5075}
-  m_LocalScale: {x: 6.812533, y: 6.812533, z: 6.812534}
+  m_LocalRotation: {x: -0.17772213, y: -0.15695578, z: 0.03491544, w: 0.9708557}
+  m_LocalPosition: {x: 160.50989, y: -19.307592, z: 77.54583}
+  m_LocalScale: {x: 3.0918572, y: 3.0918586, z: 3.0918593}
   m_Children:
   - {fileID: 434674}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 40.943, y: -31.840002, z: 25.244001}
+  m_LocalEulerAnglesHint: {x: -19.519001, y: -19.665, z: 7.5340004}
 --- !u!4 &434674
 Transform:
   m_ObjectHideFlags: 1
@@ -69,6 +69,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -84,6 +85,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -108,9 +110,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Convex: 0
-  m_InflateMesh: 0
+  m_CookingOptions: 14
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 4300000, guid: 46ae74a9c8ab5bd4faadfaa5d88d0779, type: 3}
 --- !u!1001 &100100000
