@@ -244,7 +244,7 @@ public class PlayerMotor : MonoBehaviour {
         {
             Vector3 tLeanNormalized = _lean.normalized;
             Vector3 tDash = tLeanNormalized * 10f; //10f
-            tDash.y = 8f; //5f
+            tDash.y = 6f; //8f
             _velocityFinal = tDash;
             _riverForce = Vector3.zero;
 
@@ -525,7 +525,7 @@ public class PlayerMotor : MonoBehaviour {
 
     public void CoolJump()
     {
-        _cooldownJump = .3f;
+        _cooldownJump = .1f;
     }
 
     public void Jump()
