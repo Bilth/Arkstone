@@ -435,7 +435,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1558763981119200}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -40.38675, y: -18.040403, z: 81.57413}
+  m_LocalPosition: {x: -75.35998, y: -10.2265, z: -13.920269}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4023038930458172}
@@ -493,8 +493,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1101015521650750}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5, z: 0}
+  m_LocalRotation: {x: 0.09943202, y: -0.032051872, z: 0.0032045357, w: 0.99452287}
+  m_LocalPosition: {x: 1.0350037, y: 2.1499996, z: -1.6300001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4781081637258502}
@@ -506,7 +506,7 @@ Transform:
   - {fileID: 4115890025244272}
   m_Father: {fileID: 4502564075453424}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 11.419001, y: -3.6920002, z: 0}
 --- !u!4 &4739634175609980
 Transform:
   m_ObjectHideFlags: 1
@@ -669,7 +669,7 @@ Camera:
   m_Depth: 1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294964223
+    m_Bits: 4294967295
   m_RenderingPath: 3
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1645,7 +1645,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 1429533538722902}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
